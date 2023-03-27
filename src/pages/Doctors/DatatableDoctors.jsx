@@ -1,46 +1,35 @@
 import "../../style/datatable.css";
 import { DataGrid } from "@mui/x-data-grid";
-import { userColumns } from "../../datatablesource";
+import { doctorColumns, userColumns } from "../../datatablesource";
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import PopupAlert from "../../components/popupalert/popupAlert";
 
-const DatatableUsers = () => {
-  const [users, setUsers] = useState([]);
+const DatatableDoctors = () => {
+  const [doctors, setDoctors] = useState([]);
   const [popUpShow, setPopupshow] = useState(false);
   const [popUpText, setPopupText] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/users")
+      .get("http://localhost:5000/doctor")
       .then((response) => {
-        setUsers(response.data);
+        setDoctors(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
 
-  const handleDelete = (id) => {
-    axios.delete("http://localhost:5000/users/" + id).then((response) => {
-      console.log(response.data);
-    });
-    setUsers(users.filter((el) => el._id !== id));
-    setPopupshow(true);
-    setPopupText("User Deleted");
-    setTimeout(() => {
-      setPopupshow(false);
-    }, 2000);
-  };
-
   const handleDeleteSelectedRows = () => {
     selectedRows.forEach((row) => {
       axios.delete("http://localhost:5000/users/" + row).then((response) => {
-        setUsers(response.data);
+        setDoctors(response.data);
         setPopupshow(true);
-        setPopupText(`${selectedRows.length} Users Deleted`);
+        setPopupText(`${selectedRows.length} Doctors Deleted`);
       });
     });
     setTimeout(() => {
@@ -49,33 +38,9 @@ const DatatableUsers = () => {
     setSelectedRows([]);
   };
 
-  const actionColumn = [
-    {
-      field: "action",
-      headerName: "Action",
-      width: 180,
-      renderCell: (params) => {
-        return (
-          <div className="cellAction">
-            {/*            <Link
-              to={`/users/update/${params.id}`}
-              state={{ data: params.row }}
-              style={{ textDecoration: "none" }}>
-              <div className="viewButton">Update</div>
-        </Link> */}
-            <div
-              className="deleteButton"
-              onClick={() => handleDelete(params.row._id)}>
-              Delete
-            </div>
-          </div>
-        );
-      },
-    },
-  ];
   return (
     <div className="datatable">
-      <div className="datatableTitle">Users</div>
+      <div className="datatableTitle">Doctors</div>
       {selectedRows.length > 0 ? (
         <button
           onClick={() => {
@@ -105,8 +70,8 @@ const DatatableUsers = () => {
       )}
       <DataGrid
         className="datagrid"
-        rows={users}
-        columns={userColumns.concat(actionColumn)}
+        rows={doctors}
+        columns={doctorColumns}
         checkboxSelection={true}
         onSelectionModelChange={(newSelection) => {
           setSelectedRows(newSelection);
@@ -121,4 +86,4 @@ const DatatableUsers = () => {
   );
 };
 
-export default DatatableUsers;
+export default DatatableDoctors;

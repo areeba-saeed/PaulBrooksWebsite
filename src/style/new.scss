@@ -4,7 +4,6 @@
 
   .newContainer {
     flex: 6;
-    
 
     .top-new,
     .bottom {
@@ -13,66 +12,65 @@
       padding: 10px;
       margin: 20px;
       display: flex;
-      
 
       .heading-top {
         color: lightgray;
         font-size: 20px;
         margin-top: 15px;
       }
-
-     
-
-        img {
-          width: 100px;
-          height: 100px;
-          border-radius: 50%;
-          object-fit: cover;
-        }
+      .heading {
+        color: black;
       }
 
-      .right {
-        flex: 2;
+      img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
 
-        .form-new {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 12px;
-          align-items: center;
+    .right {
+      flex: 2;
 
-          .formInput {
-            width: 40%;
+      .form-new {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
 
-            .label-form {
-              display: flex;
-              align-items: center;
-              gap: 10px;
+        .formInput {
+          width: 40%;
 
-              .icon {
-                cursor: pointer;
-              }
-            }
+          .label-form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
 
-            .input-form {
-              width: 100%;
-              padding: 5px;
-              border: 1px solid ;
-              margin-top: 10px;
+            .icon {
+              cursor: pointer;
             }
           }
 
-          .createButton {
-            width: 150px;
-            padding: 10px;
-            border: none;
-            background-color: black;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
+          .input-form {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid;
             margin-top: 10px;
           }
         }
-      
+
+        .createButton {
+          width: 150px;
+          padding: 10px;
+          border: none;
+          background-color: black;
+          color: white;
+          font-weight: bold;
+          cursor: pointer;
+          margin-top: 10px;
+        }
+      }
     }
   }
 }

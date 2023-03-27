@@ -2,68 +2,39 @@ import "../../style/new.scss";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { useEffect } from "react";
-import axios from "axios";
+import { useLocation } from "react-router-dom";
 import PopupAlert from "../../components/popupalert/popupAlert";
+import axios from "axios";
 
 const UpdateUsers = ({ title }) => {
-  const [name, setName] = useState("");
-  const [email, setemail] = useState("");
-  const [phoneNo, setPhoneNo] = useState("");
-  const [address, setAddress] = useState("");
-  const [userId, setUserId] = useState("");
+  const location = useLocation();
+  const userData = location.state.data;
+  const [name, setName] = useState(userData.name);
+  const [phoneNo, setPhoneNo] = useState(userData.phoneNo);
+  const [password, setPassword] = useState(userData.password);
   const [popUpShow, setPopupshow] = useState(false);
   const [popUpText, setPopupText] = useState("");
 
-  const { id } = useParams();
-
-  console.log(email);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:5000/users")
-      .then((response) => {
-        if (response.data.length > 0) {
-          const user = response.data.find((user) => user._id === id);
-          if (user) {
-            setName(user.name);
-            setemail(user.email);
-            setPhoneNo(user.phoneNo);
-            setAddress(user.address);
-            setUserId(user.userId);
-          }
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [id]);
 
   const handleUpdate = (e) => {
     e.preventDefault();
 
-    const user = {
-      _id: id,
+    const dataUsers = {
       name: name,
-      email: email,
-      phoneNo: phoneNo,
-      address: address,
-      userId: userId,
+      password: password,
     };
-
-    setName("");
-    setemail("");
-    setPhoneNo("");
-    setAddress("");
-
     axios
-      .post(`http://localhost:5000/users/update/${id}`, user)
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err));
-
-    setPopupshow(true);
-    setPopupText("Category Updated");
+      .post(
+        `http://localhost:5000/users/update/${userData._id}`,
+        dataUsers
+      )
+      .then((res) => {
+        setPopupshow(true);
+        setPopupText("User Updated");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     setTimeout(() => {
       setPopupshow(false);
     }, 2000);
@@ -104,30 +75,25 @@ const UpdateUsers = ({ title }) => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
-                <label className="label-form">Email</label>
-                <input
-                  type="text"
-                  placeholder="areeba@gmail.com"
-                  className="input-form"
-                  value={email}
-                  onChange={(e) => setemail(e.target.value)}
-                />
+
                 <label className="label-form">Phone No.</label>
                 <input
                   type="text"
                   placeholder="0333-333333"
                   className="input-form"
+                  style={{ color: "gray" }}
                   value={phoneNo}
-                  onChange={(e) => setPhoneNo(e.target.value)}
+                  readOnly={true}
                 />
-                <label className="label-form">Address</label>
+                <label className="label-form">Password</label>
                 <input
                   type="text"
-                  placeholder="ABC Street"
+                  placeholder="0333-333333"
                   className="input-form"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
+
                 <button className="createButton">Update</button>
               </div>
             </form>

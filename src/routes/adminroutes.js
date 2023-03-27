@@ -1,16 +1,19 @@
 import React from "react";
-import Products from "../pages/Products/Products";
-
 import Home from "../pages/home/Home";
-import NewProduct from "../pages/Products/NewProduct";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { prductsInputs, productsUpdate } from "../formSource";
-import UpdateProduct from "../pages/Products/UpdateProdcut";
-import Categories from "../pages/Categories/Categories";
+import { categoryInputs, categoryUpdate } from "../formSource";
 import Users from "../pages/Users/Users";
 import UpdateUsers from "../pages/Users/UpdateUsers";
-import Orders from "../pages/NewOrders/Orders";
-import OrderHistory from "../pages/OrderHistory/OrderHistory";
+import Symptoms from "../pages/Symptoms/Symptoms";
+import Categories from "../pages/Categories/Categories";
+import NewCategory from "../pages/Categories/NewCategory";
+import UpdateCategory from "../pages/Categories/UpdateCategory";
+import Medicines from "../pages/Medicines/Medicines";
+import NewMedicine from "../pages/Medicines/NewMedicine";
+import UpdateMedicine from "../pages/Medicines/UpdateMedicine";
+import Featured from "../pages/Featured/Featured";
+import Notification from "../pages/Notification/Notification";
+import Doctors from "../pages/Doctors/Doctors";
 
 function Adminroutes() {
   return (
@@ -20,24 +23,54 @@ function Adminroutes() {
           <Route path="/">
             <Route path="/" element={<Home />} />
 
-            <Route path="categories">
-              <Route index element={<Categories />} />
+            <Route path="symptoms">
+              <Route index element={<Symptoms />} />
+            </Route>
+            <Route path="featured">
+              <Route index element={<Featured />} />
+            </Route>
+            <Route path="send-notification">
+              <Route index element={<Notification />} />
             </Route>
 
-            <Route path="products">
-              <Route index element={<Products />} />
+            <Route path="categories">
+              <Route index element={<Categories />} />
               <Route
                 path="new"
                 element={
-                  <NewProduct inputs={prductsInputs} title="Add New Product" />
+                  <NewCategory
+                    inputs={categoryInputs}
+                    title="Add New Category"
+                  />
                 }
               />
               <Route
                 path="update/:id"
                 element={
-                  <UpdateProduct
-                    inputs={productsUpdate}
-                    title="Update Products"
+                  <UpdateCategory
+                    inputs={categoryUpdate}
+                    title="Update Category"
+                  />
+                }
+              />
+            </Route>
+            <Route path="medicines">
+              <Route index element={<Medicines />} />
+              <Route
+                path="new"
+                element={
+                  <NewMedicine
+                    inputs={categoryInputs}
+                    title="Add New Medicine"
+                  />
+                }
+              />
+              <Route
+                path="update/:id"
+                element={
+                  <UpdateMedicine
+                    inputs={categoryUpdate}
+                    title="Update Medicine"
                   />
                 }
               />
@@ -47,18 +80,12 @@ function Adminroutes() {
               <Route
                 path="update/:id"
                 element={
-                  <UpdateUsers
-                    inputs={productsUpdate}
-                    title="Update Users"
-                  />
+                  <UpdateUsers inputs={categoryUpdate} title="Update Users" />
                 }
               />
             </Route>
-            <Route path="orders">
-              <Route index element={<Orders />} />
-            </Route>
-            <Route path="ordershistory">
-              <Route index element={<OrderHistory />} />
+            <Route path="doctors">
+              <Route index element={<Doctors />} />
             </Route>
           </Route>
         </Routes>

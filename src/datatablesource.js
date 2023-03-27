@@ -1,19 +1,6 @@
-// products
-// columns heading
-export const productColumns = [
-  { field: "productId", headerName: "ProductID", width: 200 },
-  { field: "name", headerName: "Product Name", width: 200 },
-  { field: "category", headerName: "Product Category", width: 180 },
-  {
-    field: "price",
-    headerName: "Price",
-    width: 180,
-  },
-];
-
-// category
+// symptoms
 // column headings
-export const categoryColumns = [
+export const symptomColumns = [
   {
     field: "name",
     headerName: "Name",
@@ -26,15 +13,16 @@ export const categoryColumns = [
 export const userColumns = [
   { field: "userId", headerName: "ID", width: 150 },
   { field: "name", headerName: "User Name", width: 150 },
-  { field: "email", headerName: "Email", width: 200 },
   { field: "phoneNo", headerName: "Phone No.", width: 180 },
-  { field: "address", headerName: "Address", width: 200 },
+  { field: "password", headerName: "Password", width: 180 },
+  { field: "doctor", headerName: "Doctor yes/no", width: 180 },
 ];
-
-// orders
-// columns heading
-export const orderColumns = [
-  { field: "orderId", headerName: "OrderID", width: 150 },
-  { field: "userId", headerName: "UserID", width: 200 },
-  { field: "lotteryCode", headerName: "Lottery Code", width: 200 },
+export const doctorColumns = [
+  { field: "userId", headerName: "UserId", width: 100 },
+  { field: "name", headerName: "Name", width: 150 },
+  { field: "phoneNo", headerName: "Phone No.", width: 150 },
+  { field: "address", headerName: "Address", width: 180 },
+  { field: "city", headerName: "City", width: 100 },
+  { field: "province", headerName: "Province", width: 120 },
+  { field: "workPlaceName", headerName: "Work Place Name", width: 150 },
 ];

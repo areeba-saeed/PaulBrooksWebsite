@@ -7,23 +7,23 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 const Sidebar = () => {
-  const [newOrderCount, setNewOrderCount] = useState(0);
+  // const [newOrderCount, setNewOrderCount] = useState(0);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:5000/orders")
-      .then((response) => {
-        if (response.data.length > 0) {
-          const filteredOrders = response.data.filter(
-            (order) => order.status[0] !== "Completed"
-          );
-          setNewOrderCount(filteredOrders.length);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [newOrderCount]);
+  // useEffect(() => {
+  //   axios
+  //     .get("http://localhost:5000/orders")
+  //     .then((response) => {
+  //       if (response.data.length > 0) {
+  //         const filteredOrders = response.data.filter(
+  //           (order) => order.status[0] !== "Completed"
+  //         );
+  //         setNewOrderCount(filteredOrders.length);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, [newOrderCount]);
   return (
     <div className="sidebar">
       <div className="top">
@@ -40,16 +40,22 @@ const Sidebar = () => {
               <span>Dashboard</span>
             </li>
           </Link>
+          <Link to="/symptoms" style={{ textDecoration: "none" }}>
+            <li>
+              <PersonOutlineIcon className="icon" />
+              <span>Symptoms</span>
+            </li>
+          </Link>
           <Link to="/categories" style={{ textDecoration: "none" }}>
             <li>
               <PersonOutlineIcon className="icon" />
               <span>Categories</span>
             </li>
           </Link>
-          <Link to="/products" style={{ textDecoration: "none" }}>
+          <Link to="/medicines" style={{ textDecoration: "none" }}>
             <li>
               <PersonOutlineIcon className="icon" />
-              <span>Products</span>
+              <span>Medicines</span>
             </li>
           </Link>
           <Link to="/users" style={{ textDecoration: "none" }}>
@@ -58,34 +64,22 @@ const Sidebar = () => {
               <span>Users</span>
             </li>
           </Link>
-          <Link
-            to="/orders"
-            style={{
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-            }}>
+          <Link to="/doctors" style={{ textDecoration: "none" }}>
             <li>
               <PersonOutlineIcon className="icon" />
-              <span>New Orders</span>
-
-              <span
-                style={{
-                  color: "white",
-                  textAlign: "center",
-                  backgroundColor: "black",
-                  paddingLeft: 4,
-                  paddingRight: 4,
-                  borderRadius: 10,
-                }}>
-                {newOrderCount}
-              </span>
+              <span>Doctors</span>
             </li>
           </Link>
-          <Link to="/ordershistory" style={{ textDecoration: "none" }}>
+          <Link to="/featured" style={{ textDecoration: "none" }}>
             <li>
               <PersonOutlineIcon className="icon" />
-              <span>Order History</span>
+              <span>Featured Medicines</span>
+            </li>
+          </Link>
+          <Link to="/send-notification" style={{ textDecoration: "none" }}>
+            <li>
+              <PersonOutlineIcon className="icon" />
+              <span>Send Notification</span>
             </li>
           </Link>
         </ul>

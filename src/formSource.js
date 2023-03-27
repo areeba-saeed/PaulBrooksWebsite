@@ -1,5 +1,5 @@
 
-  export const prductsInputs = [
+  export const categoryInputs = [
     {
       id: 1,
       label: "Name",
@@ -26,7 +26,7 @@
       placeholder: "23245",
     },
   ];
-  export const productsUpdate = [
+  export const categoryUpdate = [
     {
       id: 1,
       label: "Title",
