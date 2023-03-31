@@ -14,15 +14,29 @@ const DatatableDoctors = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/doctor")
+      .get("http://localhost:5000/users")
       .then((response) => {
-        setDoctors(response.data);
+        const doctors = response.data.filter((user) => user.doctor === true);
+
+        setDoctors(doctors);
         console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
+
+  const handleDelete = (id) => {
+    axios.delete("http://localhost:5000/users/" + id).then((response) => {
+      console.log(response.data);
+    });
+    setDoctors(doctors.filter((el) => el._id !== id));
+    setPopupshow(true);
+    setPopupText("Doctor Deleted");
+    setTimeout(() => {
+      setPopupshow(false);
+    }, 2000);
+  };
 
   const handleDeleteSelectedRows = () => {
     selectedRows.forEach((row) => {
@@ -37,6 +51,31 @@ const DatatableDoctors = () => {
     }, 2000);
     setSelectedRows([]);
   };
+
+  const actionColumn = [
+    {
+      field: "action",
+      headerName: "Action",
+      width: 100,
+      renderCell: (params) => {
+        return (
+          <div className="cellAction">
+            {/*            <Link
+              to={`/users/update/${params.id}`}
+              state={{ data: params.row }}
+              style={{ textDecoration: "none" }}>
+              <div className="viewButton">Update</div>
+        </Link> */}
+            <div
+              className="deleteButton"
+              onClick={() => handleDelete(params.row._id)}>
+              Delete
+            </div>
+          </div>
+        );
+      },
+    },
+  ];
 
   return (
     <div className="datatable">
@@ -71,7 +110,7 @@ const DatatableDoctors = () => {
       <DataGrid
         className="datagrid"
         rows={doctors}
-        columns={doctorColumns}
+        columns={doctorColumns.concat(actionColumn)}
         checkboxSelection={true}
         onSelectionModelChange={(newSelection) => {
           setSelectedRows(newSelection);

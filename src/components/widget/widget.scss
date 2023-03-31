@@ -11,16 +11,23 @@
   background-color: black;
   position: relative;
 
-  .left,
+  .left {
+    .icon {
+      background-position: 50%;
+      font-size: 50px;
+      padding: 5px;
+      border-radius: 5px;
+      align-self: flex-start;
+    }
+  }
   .right {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    
 
     .title {
       font-weight: bold;
-      font-size: 14px;
+      font-size: 10px;
       color: rgb(255, 255, 255);
     }
 
@@ -28,33 +35,13 @@
       font-size: 28px;
       font-weight: 300;
       color: white;
+      text-align: right;
     }
 
     .link {
       width: max-content;
       font-size: 12px;
       border-bottom: 1px solid gray;
-    }
-
-    .percentage {
-      display: flex;
-      align-items: center;
-      font-size: 14px;
-
-      &.positive {
-        color: green;
-      }
-      &.negative {
-        color: red;
-      }
-    }
-
-    .icon {
-      background-position: 50%;
-      font-size: 50px;
-      padding: 5px;
-      border-radius: 5px;
-      align-self: flex-start;
     }
   }
 }

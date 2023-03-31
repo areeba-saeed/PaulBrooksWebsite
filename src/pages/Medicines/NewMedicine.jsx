@@ -26,10 +26,12 @@ const NewMedicine = ({ title }) => {
   const [instructions, setInstructions] = useState([]);
   const [ingredients, setingredients] = useState([]);
   const [category, setcategory] = useState("");
+  const [genre, setGenre] = useState("");
   const [symptoms, setsymptoms] = useState([]);
   const [popUpShow, setPopupshow] = useState(false);
   const [popUpText, setPopupText] = useState("");
   const [allCategories, setAllCategories] = useState([]);
+  const [allGenres, setAllGenres] = useState([]);
   const [allSymptoms, setAllSymptoms] = useState([]);
   const [ingredientName, setIngredientName] = useState("");
   const [weightage, setWeightage] = useState();
@@ -41,12 +43,24 @@ const NewMedicine = ({ title }) => {
     label: item.name,
   }));
 
+  console.log(genre);
+
   useEffect(() => {
     axios
       .get("http://localhost:5000/categories")
       .then((response) => {
         if (response.data.length > 0) {
           setAllCategories(response.data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    axios
+      .get("http://localhost:5000/genres")
+      .then((response) => {
+        if (response.data.length > 0) {
+          setAllGenres(response.data);
         }
       })
       .catch((error) => {
@@ -87,6 +101,7 @@ const NewMedicine = ({ title }) => {
     });
     formData.append("sideeffects", JSON.stringify(sideeffects));
     formData.append("category", category);
+    formData.append("genre", genre);
     formData.append("medicineId", randomString);
     formData.append("directions", JSON.stringify(directions));
     formData.append("instructions", JSON.stringify(instructions));
@@ -95,7 +110,12 @@ const NewMedicine = ({ title }) => {
     images.forEach((image) => {
       formData.append("images", image);
     });
-    if (ingredients.length > 0 && images.length > 0) {
+    if (
+      ingredients.length > 0 &&
+      images.length > 0 &&
+      category !== "" &&
+      genre !== ""
+    ) {
       axios
         .post("http://localhost:5000/medicines/new", formData)
         .then((response) => {
@@ -113,6 +133,7 @@ const NewMedicine = ({ title }) => {
           setInstructions([]);
           setingredients([]);
           setcategory("");
+          setGenre("");
         })
         .catch((error) => {
           if (error.response) {
@@ -213,7 +234,23 @@ const NewMedicine = ({ title }) => {
                     setcategory(e.target.value);
                   }}
                   className="input-form">
+                  <option value=""></option>
                   {allCategories.map((row) => (
+                    <option value={row.name} key={row.name}>
+                      {row.name}
+                    </option>
+                  ))}
+                </select>
+                {/* Genre */}
+                <label className="label-form">Medicine Genre*</label>
+                <select
+                  value={genre}
+                  onChange={(e) => {
+                    setGenre(e.target.value);
+                  }}
+                  className="input-form">
+                  <option value=""></option>
+                  {allGenres.map((row) => (
                     <option value={row.name} key={row.name}>
                       {row.name}
                     </option>

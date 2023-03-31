@@ -1,40 +1,30 @@
 import "./sidebar.scss";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import CategoryIcon from "@mui/icons-material/Category";
+import MedicationIcon from "@mui/icons-material/Medication";
+import LogoutIcon from "@mui/icons-material/Logout";
 
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
-  // const [newOrderCount, setNewOrderCount] = useState(0);
-
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:5000/orders")
-  //     .then((response) => {
-  //       if (response.data.length > 0) {
-  //         const filteredOrders = response.data.filter(
-  //           (order) => order.status[0] !== "Completed"
-  //         );
-  //         setNewOrderCount(filteredOrders.length);
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, [newOrderCount]);
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("loggedIn");
+    navigate("/");
+    window.location.reload();
+  };
   return (
     <div className="sidebar">
       <div className="top">
-        <Link to="/" style={{ textDecoration: "none" }}>
+        <Link to="/dashboard" style={{ textDecoration: "none" }}>
           <span className="logo">E-commerce</span>
         </Link>
       </div>
       <hr className="break-sidebar" />
       <div className="center">
         <ul>
-          <Link to="/" style={{ textDecoration: "none" }}>
+          <Link to="/dashboard" style={{ textDecoration: "none" }}>
             <li>
               <DashboardIcon className="icon" />
               <span>Dashboard</span>
@@ -42,19 +32,25 @@ const Sidebar = () => {
           </Link>
           <Link to="/symptoms" style={{ textDecoration: "none" }}>
             <li>
-              <PersonOutlineIcon className="icon" />
+              <CategoryIcon className="icon" />
               <span>Symptoms</span>
             </li>
           </Link>
           <Link to="/categories" style={{ textDecoration: "none" }}>
             <li>
-              <PersonOutlineIcon className="icon" />
+              <CategoryIcon className="icon" />
               <span>Categories</span>
+            </li>
+          </Link>
+          <Link to="/genres" style={{ textDecoration: "none" }}>
+            <li>
+              <CategoryIcon className="icon" />
+              <span>Genres</span>
             </li>
           </Link>
           <Link to="/medicines" style={{ textDecoration: "none" }}>
             <li>
-              <PersonOutlineIcon className="icon" />
+              <MedicationIcon className="icon" />
               <span>Medicines</span>
             </li>
           </Link>
@@ -72,14 +68,23 @@ const Sidebar = () => {
           </Link>
           <Link to="/featured" style={{ textDecoration: "none" }}>
             <li>
-              <PersonOutlineIcon className="icon" />
+              <MedicationIcon className="icon" />
               <span>Featured Medicines</span>
             </li>
           </Link>
-          <Link to="/send-notification" style={{ textDecoration: "none" }}>
+          <Link to="/update" style={{ textDecoration: "none" }}>
             <li>
-              <PersonOutlineIcon className="icon" />
-              <span>Send Notification</span>
+              <MedicationIcon className="icon" />
+              <span>Update Admin</span>
+            </li>
+          </Link>
+          <Link
+            to="/"
+            style={{ textDecoration: "none" }}
+            onClick={handleLogout}>
+            <li>
+              <LogoutIcon className="icon" />
+              <span>Logout</span>
             </li>
           </Link>
         </ul>

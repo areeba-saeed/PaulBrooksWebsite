@@ -12,84 +12,84 @@ import Medicines from "../pages/Medicines/Medicines";
 import NewMedicine from "../pages/Medicines/NewMedicine";
 import UpdateMedicine from "../pages/Medicines/UpdateMedicine";
 import Featured from "../pages/Featured/Featured";
-import Notification from "../pages/Notification/Notification";
 import Doctors from "../pages/Doctors/Doctors";
+import NewGenre from "../pages/Genres/NewGenre";
+import UpdateGenre from "../pages/Genres/UpdateGenre";
+import Genres from "../pages/Genres/Genres";
+import UpdateAdmin from "../pages/UpdateAdmin/UpdateAdmin";
 
 function Adminroutes() {
+  const user = localStorage.getItem("loggedIn");
+
   return (
     <div>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/">
-            <Route path="/" element={<Home />} />
-
-            <Route path="symptoms">
-              <Route index element={<Symptoms />} />
-            </Route>
-            <Route path="featured">
-              <Route index element={<Featured />} />
-            </Route>
-            <Route path="send-notification">
-              <Route index element={<Notification />} />
-            </Route>
-
-            <Route path="categories">
-              <Route index element={<Categories />} />
-              <Route
-                path="new"
-                element={
-                  <NewCategory
-                    inputs={categoryInputs}
-                    title="Add New Category"
-                  />
-                }
-              />
-              <Route
-                path="update/:id"
-                element={
-                  <UpdateCategory
-                    inputs={categoryUpdate}
-                    title="Update Category"
-                  />
-                }
-              />
-            </Route>
-            <Route path="medicines">
-              <Route index element={<Medicines />} />
-              <Route
-                path="new"
-                element={
-                  <NewMedicine
-                    inputs={categoryInputs}
-                    title="Add New Medicine"
-                  />
-                }
-              />
-              <Route
-                path="update/:id"
-                element={
-                  <UpdateMedicine
-                    inputs={categoryUpdate}
-                    title="Update Medicine"
-                  />
-                }
-              />
-            </Route>
-            <Route path="users">
-              <Route index element={<Users />} />
-              <Route
-                path="update/:id"
-                element={
-                  <UpdateUsers inputs={categoryUpdate} title="Update Users" />
-                }
-              />
-            </Route>
-            <Route path="doctors">
-              <Route index element={<Doctors />} />
-            </Route>
+      <Routes>
+        <Route path="/">
+          <Route path="/dashboard" element={<Home />} />
+          <Route path="symptoms">
+            <Route index element={<Symptoms />} />
           </Route>
-        </Routes>
-      </BrowserRouter>
+          <Route path="featured">
+            <Route index element={<Featured />} />
+          </Route>
+          {/*   <Route path="send-notification">
+          <Route index element={<Notification />} />
+        </Route>*/}
+
+          <Route path="categories">
+            <Route index element={<Categories />} />
+            <Route
+              path="new"
+              element={<NewCategory title="Add New Category" />}
+            />
+            <Route
+              path="update/:id"
+              element={<UpdateCategory title="Update Category" />}
+            />
+          </Route>
+          <Route path="genres">
+            <Route index element={<Genres />} />
+            <Route path="new" element={<NewGenre title="Add New Genre" />} />
+            <Route
+              path="update/:id"
+              element={<UpdateGenre title="Update Genre" />}
+            />
+          </Route>
+          <Route path="medicines">
+            <Route index element={<Medicines />} />
+            <Route
+              path="new"
+              element={
+                <NewMedicine inputs={categoryInputs} title="Add New Medicine" />
+              }
+            />
+            <Route
+              path="update/:id"
+              element={
+                <UpdateMedicine
+                  inputs={categoryUpdate}
+                  title="Update Medicine"
+                />
+              }
+            />
+          </Route>
+          <Route path="users">
+            <Route index element={<Users />} />
+            <Route
+              path="update/:id"
+              element={
+                <UpdateUsers inputs={categoryUpdate} title="Update Users" />
+              }
+            />
+          </Route>
+          <Route path="doctors">
+            <Route index element={<Doctors />} />
+          </Route>
+          <Route path="update">
+            <Route index element={<UpdateAdmin />} />
+          </Route>
+        </Route>
+      </Routes>
     </div>
   );
 }

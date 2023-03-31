@@ -63,6 +63,7 @@ const DatatableMedicines = () => {
     { field: "medicineId", headerName: "Medicine Id", width: 150 },
     { field: "name", headerName: "Medicine Name", width: 150 },
     { field: "category", headerName: "Category", width: 150 },
+    { field: "genre", headerName: "Genre", width: 150 },
     {
       field: "action",
       headerName: "Action",
@@ -129,6 +130,10 @@ const DatatableMedicines = () => {
               <p className="modalText">
                 <span>Category:</span>
                 <span> {selectedRow.category}</span>
+              </p>
+              <p className="modalText">
+                <span>Genre:</span>
+                <span> {selectedRow.genre}</span>
               </p>
               <h5>Description: </h5>
               <div

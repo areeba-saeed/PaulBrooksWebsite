@@ -1,37 +1,92 @@
 import "./widget.scss";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import GasMeterIcon from "@mui/icons-material/GasMeter";
+import PersonIcon from "@mui/icons-material/Person";
+import MedicationIcon from "@mui/icons-material/Medication";
+import LocationCityIcon from "@mui/icons-material/LocationCity";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import CountUp from "react-countup";
+
 const Widget = ({ type }) => {
+  const [totalMedicines, setTotalMedicine] = useState();
+  const [totalUsers, setTotalUsers] = useState();
+  const [totalDoctors, setTotalDoctors] = useState();
+  const [totalCities, setTotalCities] = useState();
+  const [totalCountries, setTotalCountries] = useState();
+  const [totalHerbal, setTotalHerbal] = useState();
+  const [totalHomopethic, setTotalHomopethic] = useState();
+  const [totalNatural, setTotalNatural] = useState();
+
   let data;
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/medicines")
+      .then((response) => {
+        const medicines = response.data;
+        let herbalCount = 0;
+        let homopethicCount = 0;
+        let NaturalCount = 0;
+        for (let i = 0; i < medicines.length; i++) {
+          if (medicines[i].genre === "Herbal") {
+            herbalCount++;
+          }
+          if (medicines[i].genre === "Homopethic") {
+            homopethicCount++;
+          }
+          if (medicines[i].genre === "Natural") {
+            NaturalCount++;
+          }
+        }
+        setTotalMedicine(response.data.length);
+        setTotalHerbal(herbalCount);
+        setTotalHomopethic(homopethicCount);
+        setTotalNatural(NaturalCount);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    axios
+      .get("http://localhost:5000/users")
+      .then((response) => {
+        const citySet = new Set();
+        const countrySet = new Set();
+        response.data.forEach((item) => {
+          if (item.city && item.city.trim() !== "") {
+            citySet.add(item.city.trim());
+          }
+        });
+        response.data.forEach((item) => {
+          if (item.country && item.country.trim() !== "") {
+            countrySet.add(item.country.trim());
+          }
+        });
+        setTotalCountries(countrySet.size);
+        setTotalCities(citySet.size);
+        setTotalUsers(response.data.length);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    axios
+      .get("http://localhost:5000/users")
+      .then((response) => {
+        const doctors = response.data.filter((user) => user.doctor === true);
+        setTotalDoctors(doctors.length);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   switch (type) {
-    case "vendor":
-      data = {
-        title: "TOTAL VENDORS",
-        isMoney: false,
-        amount: 80,
-
-        // link: "See all users",
-        icon: (
-          <PersonOutlinedIcon
-            className="icon"
-            style={{
-              backgroundColor: "white",
-              color: "black",
-            }}
-          />
-        ),
-      };
-      break;
-    case "user":
+    case "users":
       data = {
         title: "TOTAL USERS",
         isMoney: false,
-        amount: 100,
+        amount: <CountUp start={0} end={totalUsers} duration={1} />,
 
-        // link: "View all orders",
+        // link: "See all users",
         icon: (
-          <PersonOutlinedIcon
+          <PersonIcon
             className="icon"
             style={{
               backgroundColor: "white",
@@ -41,14 +96,118 @@ const Widget = ({ type }) => {
         ),
       };
       break;
-    case "devices":
+    case "doctors":
       data = {
-        title: "TOTAL DEVICES",
+        title: "TOTAL DOCTORS",
         isMoney: false,
-        amount: 120,
+        amount: <CountUp start={0} end={totalDoctors} duration={1} />,
+
+        // link: "See all users",
+        icon: (
+          <PersonIcon
+            className="icon"
+            style={{
+              backgroundColor: "white",
+              color: "black",
+            }}
+          />
+        ),
+      };
+      break;
+    case "medicines":
+      data = {
+        title: "TOTAL MEDICINES",
+        isMoney: false,
+        amount: <CountUp start={0} end={totalMedicines} duration={1} />,
+
         // link: "View all orders",
         icon: (
-          <GasMeterIcon
+          <MedicationIcon
+            className="icon"
+            style={{
+              backgroundColor: "white",
+              color: "black",
+            }}
+          />
+        ),
+      };
+      break;
+    case "cities":
+      data = {
+        title: "TOTAL CITIES",
+        isMoney: false,
+        amount: <CountUp start={0} end={totalCities} duration={1} />,
+        // link: "View all orders",
+        icon: (
+          <LocationCityIcon
+            className="icon"
+            style={{
+              backgroundColor: "white",
+              color: "black",
+            }}
+          />
+        ),
+      };
+      break;
+    case "countries":
+      data = {
+        title: "TOTAL COUNTRIES",
+        isMoney: false,
+        amount: <CountUp start={0} end={totalCountries} duration={1} />,
+        // link: "View all orders",
+        icon: (
+          <LocationCityIcon
+            className="icon"
+            style={{
+              backgroundColor: "white",
+              color: "black",
+            }}
+          />
+        ),
+      };
+      break;
+    case "herbal":
+      data = {
+        title: "TOTAL HERBAL MEDICINES",
+        isMoney: false,
+        amount: <CountUp start={0} end={totalHerbal} duration={1} />,
+        // link: "View all orders",
+        icon: (
+          <MedicationIcon
+            className="icon"
+            style={{
+              backgroundColor: "white",
+              color: "black",
+            }}
+          />
+        ),
+      };
+      break;
+    case "homopethic":
+      data = {
+        title: "TOTAL HOMOPETHIC MEDICINES",
+        isMoney: false,
+        amount: <CountUp start={0} end={totalHomopethic} duration={1} />,
+        // link: "View all orders",
+        icon: (
+          <MedicationIcon
+            className="icon"
+            style={{
+              backgroundColor: "white",
+              color: "black",
+            }}
+          />
+        ),
+      };
+      break;
+    case "natural":
+      data = {
+        title: "TOTAL NATURAL MEDICINES",
+        isMoney: false,
+        amount: <CountUp start={0} end={totalNatural} duration={1} />,
+        // link: "View all orders",
+        icon: (
+          <MedicationIcon
             className="icon"
             style={{
               backgroundColor: "white",

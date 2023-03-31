@@ -1,10 +1,11 @@
 import React from "react";
-import AdminDashboard from "./AdminDashboard";
+import Login from "./pages/Login/Login";
+import Adminroutes from "./routes/adminroutes";
 function App() {
+  const user = localStorage.getItem("loggedIn");
+  console.log(user);
   return (
-    <div className="app">
-      <AdminDashboard />
-    </div>
+    <div className="app">{user !== null ? <Adminroutes /> : <Login />}</div>
   );
 }
 

@@ -2,35 +2,44 @@ import "../../style/new.scss";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import "../../style/datatable.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import PopupAlert from "../../components/popupalert/popupAlert";
 
-const Notification = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+const UpdateAdmin = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [popUpShow, setPopupshow] = useState(false);
   const [popUpText, setPopupText] = useState("");
+  const [id, setId] = useState();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  console.log(id);
 
-    const notification = {
-      title: title,
-      description: description,
-    };
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/admin")
+      .then((response) => {
+        setUsername(response.data[0].username);
+        setPassword(response.data[0].password);
+        setId(response.data[0]._id);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
-    axios.post("http://localhost:5000/medicines/notification", notification);
-    try {
-      console.log("Success");
-      setPopupshow(true);
-      setPopupText("Notification has been sent");
-      setTimeout(() => {
-        setPopupshow(false);
-      }, 2000);
-    } catch (error) {
-      console.error(error);
-    }
+  const handleUpdate = (e) => {
+    axios
+      .post(`http://localhost:5000/admin/${id}`, {
+        username: username,
+        password: password,
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -54,34 +63,29 @@ const Notification = () => {
           ""
         )}
         <div className="datatableTitle" style={{ marginLeft: 20 }}>
-          Send Notifications
+          Update Admin Credentials
         </div>
         <div className="bottom">
           <div className="right">
-            <form
-              className="form-new"
-              onSubmit={handleSubmit}
-              method="post"
-              encType="multipart/form-data"
-              action="/upload">
+            <form className="form-new" onSubmit={handleUpdate}>
               <div className="formInput">
-                <label className="label-form">Notification Title</label>
+                <label className="label-form">Admin Name</label>
                 <input
                   type="text"
                   placeholder="New Medicine Added"
                   className="input-form"
-                  value={title}
+                  value={username}
                   onChange={(e) => {
-                    setTitle(e.target.value);
+                    setUsername(e.target.value);
                   }}
                   required
                 />
-                <label className="label-form">Notification Message</label>
+                <label className="label-form">Admin Password</label>
                 <textarea
                   className="input-form"
                   rows="6"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                 />
 
@@ -95,4 +99,4 @@ const Notification = () => {
   );
 };
 
-export default Notification;
+export default UpdateAdmin;

@@ -16,7 +16,8 @@ const DatatableUsers = () => {
     axios
       .get("http://localhost:5000/users")
       .then((response) => {
-        setUsers(response.data);
+        const users = response.data.filter((user) => user.doctor === false);
+        setUsers(users);
       })
       .catch((error) => {
         console.log(error);

@@ -37,6 +37,7 @@ const UpdateMedicine = ({ title }) => {
   );
   const [ingredients, setingredients] = useState(medicineData.ingredients);
   const [category, setcategory] = useState(medicineData.category);
+  const [genre, setGenre] = useState(medicineData.genre);
   const [symptoms, setsymptoms] = useState(
     medicineData.symptoms?.map((symptom) => ({
       label: symptom.name,
@@ -47,6 +48,7 @@ const UpdateMedicine = ({ title }) => {
   const [popUpShow, setPopupshow] = useState(false);
   const [popUpText, setPopupText] = useState("");
   const [allCategories, setAllCategories] = useState([]);
+  const [allGenres, setAllGenres] = useState([]);
   const [allSymptoms, setAllSymptoms] = useState([]);
   const [ingredientName, setIngredientName] = useState("");
   const [weightage, setWeightage] = useState();
@@ -58,6 +60,16 @@ const UpdateMedicine = ({ title }) => {
       .then((response) => {
         if (response.data.length > 0) {
           setAllCategories(response.data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    axios
+      .get("http://localhost:5000/genres")
+      .then((response) => {
+        if (response.data.length > 0) {
+          setAllGenres(response.data);
         }
       })
       .catch((error) => {
@@ -118,6 +130,7 @@ const UpdateMedicine = ({ title }) => {
     });
     formData.append("sideeffects", JSON.stringify(sideeffects));
     formData.append("category", category);
+    formData.append("genre", genre);
     formData.append("medicineId", randomString);
     formData.append("directions", JSON.stringify(directions));
     formData.append("instructions", JSON.stringify(instructions));
@@ -214,6 +227,7 @@ const UpdateMedicine = ({ title }) => {
         </div>
         <div className="bottom">
           <div className="right">
+            <h5 style={{ color:"green" }}>Important: Make sure to upload files again</h5>
             <form
               className="form-new"
               onSubmit={handleSubmit}
@@ -241,6 +255,21 @@ const UpdateMedicine = ({ title }) => {
                   }}
                   className="input-form">
                   {allCategories.map((row) => (
+                    <option value={row.name} key={row.name}>
+                      {row.name}
+                    </option>
+                  ))}
+                </select>
+                {/* Genre */}
+                <label className="label-form">Medicine Genre*</label>
+                <select
+                  value={genre}
+                  onChange={(e) => {
+                    setGenre(e.target.value);
+                  }}
+                  className="input-form">
+                  <option value=""></option>
+                  {allGenres.map((row) => (
                     <option value={row.name} key={row.name}>
                       {row.name}
                     </option>
