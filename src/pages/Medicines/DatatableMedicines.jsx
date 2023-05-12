@@ -13,11 +13,9 @@ const DatatableMedicines = () => {
   const [popUpText, setPopupText] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
 
-  console.log(selectedRow);
-
   useEffect(() => {
     axios
-      .get("http://localhost:5000/medicines")
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/medicines")
       .then((response) => {
         if (response.data.length > 0) {
           setmedicines(response.data);
@@ -30,7 +28,9 @@ const DatatableMedicines = () => {
 
   const handleDelete = (id) => {
     axios
-      .delete("http://localhost:5000/medicines/delete/" + id)
+      .delete(
+        "https://paulbrooksapi.doctorsforhealth.co.uk/medicines/delete/" + id
+      )
       .then((response) => {
         console.log(response.data);
       });
@@ -46,7 +46,9 @@ const DatatableMedicines = () => {
   const handleDeleteSelectedRows = () => {
     selectedRows.forEach((row) => {
       axios
-        .delete("http://localhost:5000/medicines/delete/" + row)
+        .delete(
+          "https://paulbrooksapi.doctorsforhealth.co.uk/medicines/delete/" + row
+        )
         .then((response) => {
           window.location.reload();
           setPopupshow(true);
@@ -64,6 +66,7 @@ const DatatableMedicines = () => {
     { field: "name", headerName: "Medicine Name", width: 150 },
     { field: "category", headerName: "Category", width: 150 },
     { field: "genre", headerName: "Genre", width: 150 },
+    { field: "price", headerName: "Retail Price", width: 150 },
     {
       field: "action",
       headerName: "Action",
@@ -128,6 +131,10 @@ const DatatableMedicines = () => {
                 <span> {selectedRow.name}</span>
               </p>
               <p className="modalText">
+                <span>Retail Price:</span>
+                <span> {selectedRow.price}</span>
+              </p>
+              <p className="modalText">
                 <span>Category:</span>
                 <span> {selectedRow.category}</span>
               </p>
@@ -135,52 +142,98 @@ const DatatableMedicines = () => {
                 <span>Genre:</span>
                 <span> {selectedRow.genre}</span>
               </p>
-              <h5>Description: </h5>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: JSON.parse(selectedRow.description),
-                }}></div>
-              <h5>Benefits: </h5>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: JSON.parse(selectedRow.benefits),
-                }}></div>{" "}
-              <h5>Side Effects: </h5>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: JSON.parse(selectedRow.sideeffects),
-                }}></div>{" "}
-              <h5>Instructions: </h5>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: JSON.parse(selectedRow.instructions),
-                }}></div>{" "}
-              <h5>Symptoms: </h5>
-              <div style={{ display: "flex" }}>
-                {"{"}
-                {selectedRow.symptoms.map((row) => row.name).join(", ")}
-                {"}"}
-              </div>
-              <h5>Directions: </h5>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: JSON.parse(selectedRow.directions),
-                }}></div>
-              <h5>Ingredients: </h5>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <p style={{ color: "black", fontWeight: "bold" }}>Name</p>
-                <p style={{ color: "black", fontWeight: "bold" }}>Dosage</p>
-              </div>
-              {selectedRow.ingredients.map((row, index) => (
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                  key={index}>
-                  <p className="modalText">{row.ingredientName}</p>
-                  <p className="modalText">
-                    {row.weightage} <span>{row.measurement}</span>
-                  </p>
+              {selectedRow.description !== "undefined" ? (
+                <div>
+                  <h5>Description: </h5>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: JSON.parse(selectedRow.description),
+                    }}></div>
                 </div>
-              ))}
+              ) : (
+                ""
+              )}
+              {selectedRow.benefits !== "undefined" ? (
+                <div>
+                  <h5>Benefits: </h5>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: JSON.parse(selectedRow.benefits),
+                    }}></div>
+                </div>
+              ) : (
+                ""
+              )}
+              {selectedRow.sideeffects !== "undefined" ? (
+                <div>
+                  <h5>Side Effects: </h5>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: JSON.parse(selectedRow.sideeffects),
+                    }}></div>
+                </div>
+              ) : (
+                ""
+              )}
+              {selectedRow.instructions !== "undefined" ? (
+                <div>
+                  <h5>Instructions: </h5>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: JSON.parse(selectedRow.instructions),
+                    }}></div>
+                </div>
+              ) : (
+                ""
+              )}
+
+              <div>
+                <h5>Symptoms: </h5>
+                <div style={{ display: "flex" }}>
+                  {"{"}
+                  {selectedRow.symptoms.map((row) => row.name).join(", ")}
+                  {"}"}
+                </div>
+              </div>
+              {selectedRow.directions !== "undefined" ? (
+                <div>
+                  <h5>Directions: </h5>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: JSON.parse(selectedRow.directions),
+                    }}></div>
+                </div>
+              ) : (
+                ""
+              )}
+              {selectedRow.ingredients.length > 0 ? (
+                <div>
+                  <h5>Ingredients: </h5>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}>
+                    <p style={{ color: "black", fontWeight: "bold" }}>Name</p>
+                    <p style={{ color: "black", fontWeight: "bold" }}>Dosage</p>
+                  </div>
+                  {selectedRow.ingredients.map((row, index) => (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                      key={index}>
+                      <p className="modalText">{row.ingredientName}</p>
+                      <p className="modalText">
+                        {row.weightage} <span>{row.measurement}</span>
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                ""
+              )}
               <h5 className="modalText" style={{ textAlign: "center" }}>
                 Medicine Images:
               </h5>
@@ -190,7 +243,7 @@ const DatatableMedicines = () => {
                   return (
                     <div key={index}>
                       <img
-                        src={require(`../../assets/medicine/${row}`)}
+                        src={`https://paulbrooksapi.doctorsforhealth.co.uk/images/${row}`}
                         width={"100"}
                         height={"100"}
                       />
@@ -205,7 +258,7 @@ const DatatableMedicines = () => {
                   </h5>
                   <div className="bannerImage">
                     <img
-                      src={require(`../../assets/medicine/${selectedRow.bannerImage}`)}
+                      src={`https://paulbrooksapi.doctorsforhealth.co.uk/images/${selectedRow.bannerImage}`}
                       width={"300"}
                     />
                   </div>

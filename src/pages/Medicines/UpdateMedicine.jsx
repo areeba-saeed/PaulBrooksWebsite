@@ -8,7 +8,7 @@ import PopupAlert from "../../components/popupalert/popupAlert";
 import Select from "react-select";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { useLocation } from "react-router-dom";
+import { json, useLocation } from "react-router-dom";
 const { uid } = require("uid");
 
 const RandomDigit = uid();
@@ -20,22 +20,14 @@ const UpdateMedicine = ({ title }) => {
   const location = useLocation();
   const medicineData = location.state.data;
   const [name, setName] = useState(medicineData.name);
-  const [bannerImage, setFile] = useState(medicineData.bannerImage);
-  const [description, setDescription] = useState(
-    JSON.parse(medicineData.description)
-  );
-  const [benefits, setBenefits] = useState(JSON.parse(medicineData.benefits));
-  const [sideeffects, setSideEffects] = useState(
-    JSON.parse(medicineData.sideeffects)
-  );
-  const [directions, setDirections] = useState(
-    JSON.parse(medicineData.directions)
-  );
+  const [bannerImage, setFile] = useState();
+  const [description, setDescription] = useState();
+  const [benefits, setBenefits] = useState();
+  const [sideeffects, setSideEffects] = useState();
+  const [directions, setDirections] = useState();
   const [images, setImages] = useState(medicineData.images);
-  const [instructions, setInstructions] = useState(
-    JSON.parse(medicineData.instructions)
-  );
-  const [ingredients, setingredients] = useState(medicineData.ingredients);
+  const [instructions, setInstructions] = useState();
+  const [ingredients, setingredients] = useState([]);
   const [category, setcategory] = useState(medicineData.category);
   const [genre, setGenre] = useState(medicineData.genre);
   const [symptoms, setsymptoms] = useState(
@@ -53,10 +45,42 @@ const UpdateMedicine = ({ title }) => {
   const [ingredientName, setIngredientName] = useState("");
   const [weightage, setWeightage] = useState();
   const [measurement, setMeasurement] = useState("");
+  const [price, setPrice] = useState(medicineData.price);
+
+  console.log(ingredients);
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/categories")
+      .get(
+        `https://paulbrooksapi.doctorsforhealth.co.uk/medicines/${medicineData._id}`
+      )
+      .then((response) => {
+        if (response.data[0].benefits) {
+          setBenefits(JSON.parse(response.data[0].benefits));
+        }
+        if (response.data[0].sideeffects) {
+          setSideEffects(JSON.parse(response.data[0].sideeffects));
+        }
+        if (response.data[0].directions) {
+          setDirections(JSON.parse(response.data[0].directions));
+        }
+        if (response.data[0].description) {
+          setDescription(JSON.parse(response.data[0].description));
+        }
+        if (response.data[0].instructions) {
+          setInstructions(JSON.parse(response.data[0].instructions));
+        }
+        if (response.data[0].ingredients.length > 0) {
+          setingredients(response.data[0].ingredients);
+        }
+        // console.log(response.data[0].addIngredients);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    axios
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/categories")
       .then((response) => {
         if (response.data.length > 0) {
           setAllCategories(response.data);
@@ -66,7 +90,7 @@ const UpdateMedicine = ({ title }) => {
         console.log(error);
       });
     axios
-      .get("http://localhost:5000/genres")
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/genres")
       .then((response) => {
         if (response.data.length > 0) {
           setAllGenres(response.data);
@@ -76,7 +100,7 @@ const UpdateMedicine = ({ title }) => {
         console.log(error);
       });
     axios
-      .get("http://localhost:5000/symptoms")
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/symptoms")
       .then((response) => {
         if (response.data.length > 0) {
           setAllSymptoms(response.data);
@@ -84,26 +108,6 @@ const UpdateMedicine = ({ title }) => {
       })
       .catch((error) => {
         console.log(error);
-      });
-    axios
-      .get(`http://localhost:5000/medicines/${medicineData.bannerImage}`)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        if (error.response) {
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log("Error", error.message);
-        }
       });
   }, []);
 
@@ -117,6 +121,7 @@ const UpdateMedicine = ({ title }) => {
     symptoms.map((symptom, index) => {
       formData.append(`symptoms[${index}][name]`, symptom.name);
     });
+
     ingredients.forEach((ingredient, index) => {
       formData.append(
         `ingredients[${index}][ingredientName]`,
@@ -128,6 +133,7 @@ const UpdateMedicine = ({ title }) => {
         ingredient.measurement
       );
     });
+
     formData.append("sideeffects", JSON.stringify(sideeffects));
     formData.append("category", category);
     formData.append("genre", genre);
@@ -135,40 +141,44 @@ const UpdateMedicine = ({ title }) => {
     formData.append("directions", JSON.stringify(directions));
     formData.append("instructions", JSON.stringify(instructions));
     formData.append("bannerImage", bannerImage);
+    formData.append("price", price);
+
     images.forEach((image) => {
       formData.append("images", image);
     });
-    axios
-      .post(
-        `http://localhost:5000/medicines/update/${medicineData._id}`,
-        formData
-      )
-      .then((response) => {
-        if (ingredients.length > 0) {
+    if (images.length > 0 && category !== "" && genre !== "") {
+      axios
+        .post(
+          `https://paulbrooksapi.doctorsforhealth.co.uk/medicines/update/${medicineData._id}`,
+          formData
+        )
+        .then((response) => {
           console.log(response.data);
 
           setPopupshow(true);
           setPopupText("Medicine Updated");
-        }
-      })
-      .catch((error) => {
-        if (error.response) {
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.log("Error", error.message);
-        }
-      });
-    setTimeout(() => {
-      setPopupshow(false);
-    }, 2000);
+          setTimeout(() => {
+            setPopupshow(false);
+          }, 2000);
+        })
+        .catch((error) => {
+          if (error.response) {
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log("Error", error.message);
+          }
+        });
+    } else {
+      alert("Fill nescessary the fields");
+    }
   };
 
   const handleBannerImageUpload = (event) => {
@@ -227,7 +237,9 @@ const UpdateMedicine = ({ title }) => {
         </div>
         <div className="bottom">
           <div className="right">
-            <h5 style={{ color:"green" }}>Important: Make sure to upload files again</h5>
+            <h5 style={{ color: "green" }}>
+              Important: Make sure to upload files again
+            </h5>
             <form
               className="form-new"
               onSubmit={handleSubmit}
@@ -244,6 +256,16 @@ const UpdateMedicine = ({ title }) => {
                   value={name}
                   onChange={(e) => {
                     setName(e.target.value);
+                  }}
+                />
+                <label className="label-form">Retail Price*</label>
+                <input
+                  type="number"
+                  placeholder="45"
+                  className="input-form"
+                  value={price}
+                  onChange={(e) => {
+                    setPrice(e.target.value);
                   }}
                 />
                 {/* Categories */}

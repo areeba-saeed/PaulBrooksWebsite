@@ -15,7 +15,7 @@ const DatatableGenres = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/genres")
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/genres")
       .then((response) => {
         if (response.data.length > 0) {
           setgenres(response.data);
@@ -27,7 +27,7 @@ const DatatableGenres = () => {
   }, []);
 
   const handleDelete = (id) => {
-    axios.delete("http://localhost:5000/genres/" + id).then((response) => {
+    axios.delete("https://paulbrooksapi.doctorsforhealth.co.uk/genres/" + id).then((response) => {
       console.log(response.data);
     });
 
@@ -41,7 +41,7 @@ const DatatableGenres = () => {
 
   const handleDeleteSelectedRows = () => {
     selectedRows.forEach((row) => {
-      axios.delete("http://localhost:5000/genres/" + row).then((response) => {
+      axios.delete("https://paulbrooksapi.doctorsforhealth.co.uk/genres/" + row).then((response) => {
         setgenres(response.data);
         setPopupshow(true);
         setPopupText(`${selectedRows.length} genres Deleted`);
@@ -123,7 +123,7 @@ const DatatableGenres = () => {
             </p>
             <div style={{ margin: 40 }}>
               <img
-                src={`http://localhost:5000/genres/${selectedRow.image}`}
+                src={`https://paulbrooksapi.doctorsforhealth.co.uk/genres/${selectedRow.image}`}
                 width={"400"}
                 height={"400"}
               />

@@ -16,7 +16,7 @@ const DatatableFeatured = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/medicines")
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/medicines")
       .then((response) => {
         const featuredMedicines = response.data.filter(
           (medicine) => medicine.featured === true
@@ -43,37 +43,6 @@ const DatatableFeatured = () => {
       });
   }, []);
 
-  const handleDelete = (id) => {
-    axios
-      .delete("http://localhost:5000/medicines/delete/" + id)
-      .then((response) => {
-        console.log(response.data);
-      });
-
-    setmedicines(medicines.filter((el) => el._id !== id));
-    setPopupshow(true);
-    setPopupText("Category Deleted");
-    setTimeout(() => {
-      setPopupshow(false);
-    }, 2000);
-  };
-
-  const handleDeleteSelectedRows = () => {
-    selectedRows.forEach((row) => {
-      axios
-        .delete("http://localhost:5000/medicines/delete/" + row)
-        .then((response) => {
-          setmedicines(response.data);
-          setPopupshow(true);
-          setPopupText(`${selectedRows.length} Medicines Deleted`);
-        });
-    });
-    setTimeout(() => {
-      setPopupshow(false);
-    }, 2000);
-    setSelectedRows([]);
-  };
-
   const actionColumn = [
     { field: "medicineId", headerName: "Medicine Id", width: 150 },
     { field: "name", headerName: "Medicine Name", width: 300 },
@@ -98,11 +67,6 @@ const DatatableFeatured = () => {
               }}>
               View
             </div>
-            <div
-              className="deleteButton"
-              onClick={() => handleDelete(params.row._id)}>
-              Delete
-            </div>
           </div>
         );
       },
@@ -119,14 +83,7 @@ const DatatableFeatured = () => {
           Add Featured
         </div>
       </div>
-      {selectedRows.length > 0 ? (
-        <button
-          onClick={() => {
-            handleDeleteSelectedRows();
-          }}>
-          Delete Selected Rows
-        </button>
-      ) : null}
+
       {openModal ? (
         <div className="modal">
           <div className="modalInnerMedicine">

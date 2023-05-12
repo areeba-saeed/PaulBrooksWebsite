@@ -17,7 +17,7 @@ const UpdateAdmin = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/admin")
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/admin")
       .then((response) => {
         setUsername(response.data[0].username);
         setPassword(response.data[0].password);
@@ -30,7 +30,7 @@ const UpdateAdmin = () => {
 
   const handleUpdate = (e) => {
     axios
-      .post(`http://localhost:5000/admin/${id}`, {
+      .post(`https://paulbrooksapi.doctorsforhealth.co.uk/admin/${id}`, {
         username: username,
         password: password,
       })

@@ -2,22 +2,23 @@ import "../../style/new.scss";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import { useState, useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import PopupAlert from "../../components/popupalert/popupAlert";
 import axios from "axios";
 
-const UpdateUsers = ({ title }) => {
+const UpdateDoctors = ({ title }) => {
   const location = useLocation();
   const userData = location.state.data;
-  const { id } = useParams();
   const [name, setName] = useState(userData.name);
-  const [password, setPassword] = useState(userData.password);
+  const [password, setPassword] = useState("");
   const [popUpShow, setPopupshow] = useState(false);
   const [popUpText, setPopupText] = useState("");
   const [country, setCountry] = useState(userData.country);
   const [city, setCity] = useState(userData.city);
   const [allCountries, setAllContries] = useState([]);
   const [allCities, setAllCities] = useState([]);
+  const [address, setAddress] = useState(userData.address);
+  const [workPlaceName, setWordPlaceName] = useState(userData.workPlaceName);
 
   useEffect(() => {
     axios
@@ -40,22 +41,24 @@ const UpdateUsers = ({ title }) => {
       password: password,
       // country: country,
       // city: city,
+      // address: address,
+      // workPlaceName: workPlaceName,
     };
     axios
       .put(
-        `https://paulbrooksapi.doctorsforhealth.co.uk/users/update/${id}`,
+        `https://paulbrooksapi.doctorsforhealth.co.uk/users/update/${userData._id}`,
         dataUsers
       )
       .then((res) => {
         setPopupshow(true);
         setPopupText("User Updated");
-        setTimeout(() => {
-          setPopupshow(false);
-        }, 2000);
       })
       .catch((err) => {
         console.log(err);
       });
+    setTimeout(() => {
+      setPopupshow(false);
+    }, 2000);
   };
 
   return (
@@ -85,7 +88,6 @@ const UpdateUsers = ({ title }) => {
           <div className="right">
             <form className="form-new" onSubmit={handleUpdate}>
               <div className="formInput">
-              
                 <label className="label-form">Password</label>
                 <input
                   type="text"
@@ -94,7 +96,6 @@ const UpdateUsers = ({ title }) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-               
 
                 <button className="createButton">Update</button>
               </div>
@@ -106,4 +107,4 @@ const UpdateUsers = ({ title }) => {
   );
 };
 
-export default UpdateUsers;
+export default UpdateDoctors;

@@ -19,7 +19,7 @@ const Widget = ({ type }) => {
   let data;
   useEffect(() => {
     axios
-      .get("http://localhost:5000/medicines")
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/medicines")
       .then((response) => {
         const medicines = response.data;
         let herbalCount = 0;
@@ -45,7 +45,7 @@ const Widget = ({ type }) => {
         console.log(error);
       });
     axios
-      .get("http://localhost:5000/users")
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/users")
       .then((response) => {
         const citySet = new Set();
         const countrySet = new Set();
@@ -67,7 +67,7 @@ const Widget = ({ type }) => {
         console.log(error);
       });
     axios
-      .get("http://localhost:5000/users")
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/users")
       .then((response) => {
         const doctors = response.data.filter((user) => user.doctor === true);
         setTotalDoctors(doctors.length);
@@ -82,7 +82,7 @@ const Widget = ({ type }) => {
       data = {
         title: "TOTAL USERS",
         isMoney: false,
-        amount: <CountUp start={0} end={totalUsers} duration={1} />,
+        amount: <CountUp start={0} end={totalUsers} duration={3} />,
 
         // link: "See all users",
         icon: (
@@ -100,7 +100,7 @@ const Widget = ({ type }) => {
       data = {
         title: "TOTAL DOCTORS",
         isMoney: false,
-        amount: <CountUp start={0} end={totalDoctors} duration={1} />,
+        amount: <CountUp start={0} end={totalDoctors} duration={3} />,
 
         // link: "See all users",
         icon: (
@@ -118,7 +118,7 @@ const Widget = ({ type }) => {
       data = {
         title: "TOTAL MEDICINES",
         isMoney: false,
-        amount: <CountUp start={0} end={totalMedicines} duration={1} />,
+        amount: <CountUp start={0} end={totalMedicines} duration={3} />,
 
         // link: "View all orders",
         icon: (
@@ -136,7 +136,7 @@ const Widget = ({ type }) => {
       data = {
         title: "TOTAL CITIES",
         isMoney: false,
-        amount: <CountUp start={0} end={totalCities} duration={1} />,
+        amount: <CountUp start={0} end={totalCities} duration={3} />,
         // link: "View all orders",
         icon: (
           <LocationCityIcon
@@ -153,7 +153,7 @@ const Widget = ({ type }) => {
       data = {
         title: "TOTAL COUNTRIES",
         isMoney: false,
-        amount: <CountUp start={0} end={totalCountries} duration={1} />,
+        amount: <CountUp start={0} end={totalCountries} duration={3} />,
         // link: "View all orders",
         icon: (
           <LocationCityIcon
@@ -170,7 +170,7 @@ const Widget = ({ type }) => {
       data = {
         title: "TOTAL HERBAL MEDICINES",
         isMoney: false,
-        amount: <CountUp start={0} end={totalHerbal} duration={1} />,
+        amount: <CountUp start={0} end={totalHerbal} duration={3} />,
         // link: "View all orders",
         icon: (
           <MedicationIcon
@@ -187,7 +187,7 @@ const Widget = ({ type }) => {
       data = {
         title: "TOTAL HOMOPETHIC MEDICINES",
         isMoney: false,
-        amount: <CountUp start={0} end={totalHomopethic} duration={1} />,
+        amount: <CountUp start={0} end={totalHomopethic} duration={3} />,
         // link: "View all orders",
         icon: (
           <MedicationIcon
@@ -204,7 +204,7 @@ const Widget = ({ type }) => {
       data = {
         title: "TOTAL NATURAL MEDICINES",
         isMoney: false,
-        amount: <CountUp start={0} end={totalNatural} duration={1} />,
+        amount: <CountUp start={0} end={totalNatural} duration={3} />,
         // link: "View all orders",
         icon: (
           <MedicationIcon

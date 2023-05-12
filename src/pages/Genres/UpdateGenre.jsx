@@ -17,7 +17,7 @@ const UpdateGenre = ({ title }) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/genres")
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/genres")
       .then((response) => {
         if (response.data.length > 0) {
           const user = response.data.find((user) => user._id === id);
@@ -41,7 +41,7 @@ const UpdateGenre = ({ title }) => {
     formData.append("image", file);
 
     axios
-      .post(`http://localhost:5000/genres/update/${id}`, formData)
+      .post(`https://paulbrooksapi.doctorsforhealth.co.uk/genres/update/${id}`, formData)
       .then((res) => {
         setPopupshow(true);
         setPopupText("Genre Update");

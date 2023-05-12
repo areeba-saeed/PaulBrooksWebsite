@@ -18,12 +18,12 @@ const randomString = RandomDigit.replace(/[^0-9a-zA-Z]/g, "") // remove non-digi
 const NewMedicine = ({ title }) => {
   const [name, setName] = useState("");
   const [bannerImage, setBannerImage] = useState(null);
-  const [description, setDescription] = useState([]);
-  const [benefits, setBenefits] = useState([]);
-  const [sideeffects, setSideEffects] = useState([]);
-  const [directions, setDirections] = useState([]);
+  const [description, setDescription] = useState();
+  const [benefits, setBenefits] = useState();
+  const [sideeffects, setSideEffects] = useState();
+  const [directions, setDirections] = useState();
   const [images, setImages] = useState([]);
-  const [instructions, setInstructions] = useState([]);
+  const [instructions, setInstructions] = useState();
   const [ingredients, setingredients] = useState([]);
   const [category, setcategory] = useState("");
   const [genre, setGenre] = useState("");
@@ -36,6 +36,7 @@ const NewMedicine = ({ title }) => {
   const [ingredientName, setIngredientName] = useState("");
   const [weightage, setWeightage] = useState();
   const [measurement, setMeasurement] = useState("");
+  const [price, setPrice] = useState();
 
   const updatedSymptoms = allSymptoms.map((item) => ({
     ...item,
@@ -47,7 +48,7 @@ const NewMedicine = ({ title }) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/categories")
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/categories")
       .then((response) => {
         if (response.data.length > 0) {
           setAllCategories(response.data);
@@ -57,7 +58,7 @@ const NewMedicine = ({ title }) => {
         console.log(error);
       });
     axios
-      .get("http://localhost:5000/genres")
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/genres")
       .then((response) => {
         if (response.data.length > 0) {
           setAllGenres(response.data);
@@ -67,7 +68,7 @@ const NewMedicine = ({ title }) => {
         console.log(error);
       });
     axios
-      .get("http://localhost:5000/symptoms")
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/symptoms")
       .then((response) => {
         if (response.data.length > 0) {
           setAllSymptoms(response.data);
@@ -100,6 +101,7 @@ const NewMedicine = ({ title }) => {
       );
     });
     formData.append("sideeffects", JSON.stringify(sideeffects));
+    formData.append("price", price);
     formData.append("category", category);
     formData.append("genre", genre);
     formData.append("medicineId", randomString);
@@ -110,14 +112,12 @@ const NewMedicine = ({ title }) => {
     images.forEach((image) => {
       formData.append("images", image);
     });
-    if (
-      ingredients.length > 0 &&
-      images.length > 0 &&
-      category !== "" &&
-      genre !== ""
-    ) {
+    if (images.length > 0 && category !== "" && genre !== "") {
       axios
-        .post("http://localhost:5000/medicines/new", formData)
+        .post(
+          "https://paulbrooksapi.doctorsforhealth.co.uk/medicines/new",
+          formData
+        )
         .then((response) => {
           setName("");
           setPopupshow(true);
@@ -139,9 +139,10 @@ const NewMedicine = ({ title }) => {
           if (error.response) {
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
+            if (error.response.data.message) {
+              window.alert(error.response.data.message);
+              window.location.reload();
+            }
           } else if (error.request) {
             // The request was made but no response was received
             // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
@@ -153,7 +154,7 @@ const NewMedicine = ({ title }) => {
           }
         });
     } else {
-      alert("Fill all the fields");
+      alert("Fill nescessary the fields");
     }
     setTimeout(() => {
       setPopupshow(false);
@@ -226,6 +227,16 @@ const NewMedicine = ({ title }) => {
                     setName(e.target.value);
                   }}
                 />
+                <label className="label-form">Retail Price*</label>
+                <input
+                  type="number"
+                  placeholder="45"
+                  className="input-form"
+                  value={price}
+                  onChange={(e) => {
+                    setPrice(e.target.value);
+                  }}
+                />
                 {/* Categories */}
                 <label className="label-form">Medicine Category*</label>
                 <select
@@ -266,14 +277,15 @@ const NewMedicine = ({ title }) => {
                 />
                 {/* Description */}
                 <label htmlFor="description" className="label-form">
-                  Medicine Description*: (Max 10 points)
+                  Medicine Description:
                 </label>
                 <ReactQuill
                   value={description}
                   onChange={(value) => setDescription(value)}
                 />
+
                 {/* Ingredients*/}
-                <label className="label-form">Medicine Ingredients*</label>
+                <label className="label-form">Medicine Ingredients</label>
 
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}>
@@ -340,25 +352,25 @@ const NewMedicine = ({ title }) => {
                   ))}
                 </ul>
                 {/* Instructions*/}
-                <label className="label-form">Medicine Instructions*</label>
+                <label className="label-form">Medicine Instructions</label>
                 <ReactQuill
                   value={instructions}
                   onChange={(value) => setInstructions(value)}
                 />
                 {/* Benefits*/}
-                <label className="label-form">Medicine Benefits*</label>
+                <label className="label-form">Medicine Benefits</label>
                 <ReactQuill
                   value={benefits}
                   onChange={(value) => setBenefits(value)}
                 />
                 {/* SideEffects*/}
-                <label className="label-form">Medicine Side-effects*</label>
+                <label className="label-form">Medicine Side-effects</label>
                 <ReactQuill
                   value={sideeffects}
                   onChange={(value) => setSideEffects(value)}
                 />
                 {/* Directions*/}
-                <label className="label-form">Medicine Directions*</label>
+                <label className="label-form">Medicine Directions</label>
                 <ReactQuill
                   value={directions}
                   onChange={(value) => setDirections(value)}

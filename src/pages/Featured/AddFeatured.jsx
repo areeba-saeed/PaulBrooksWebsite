@@ -33,7 +33,7 @@ const AddFeatured = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/medicines")
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/medicines")
       .then((response) => {
         if (response.data.length > 0) {
           const filteredMedicines = response.data.filter(
@@ -50,7 +50,10 @@ const AddFeatured = () => {
   const handleAddSelectedRows = () => {
     if (selectedRows.length < 11) {
       axios
-        .put("http://localhost:5000/medicines/featured", { ids: selectedRows })
+        .put(
+          "https://paulbrooksapi.doctorsforhealth.co.uk/medicines/featured",
+          { ids: selectedRows }
+        )
         .then((response) => {
           console.log(response.data);
           setPopupshow(true);
@@ -113,7 +116,7 @@ const AddFeatured = () => {
         return (
           <div>
             <img
-              src={require(`../../assets/medicine/${params.row.bannerImage}`)}
+              src={`https://paulbrooksapi.doctorsforhealth.co.uk/images/${params.row.bannerImage}`}
               width={"150"}
               height={"40"}
             />

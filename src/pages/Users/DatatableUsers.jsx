@@ -14,7 +14,7 @@ const DatatableUsers = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/users")
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/users")
       .then((response) => {
         const users = response.data.filter((user) => user.doctor === false);
         setUsers(users);
@@ -25,7 +25,7 @@ const DatatableUsers = () => {
   }, []);
 
   const handleDelete = (id) => {
-    axios.delete("http://localhost:5000/users/" + id).then((response) => {
+    axios.delete("https://paulbrooksapi.doctorsforhealth.co.uk/users/" + id).then((response) => {
       console.log(response.data);
     });
     setUsers(users.filter((el) => el._id !== id));
@@ -38,7 +38,7 @@ const DatatableUsers = () => {
 
   const handleDeleteSelectedRows = () => {
     selectedRows.forEach((row) => {
-      axios.delete("http://localhost:5000/users/" + row).then((response) => {
+      axios.delete("https://paulbrooksapi.doctorsforhealth.co.uk/users/" + row).then((response) => {
         setUsers(response.data);
         setPopupshow(true);
         setPopupText(`${selectedRows.length} Users Deleted`);
@@ -58,12 +58,12 @@ const DatatableUsers = () => {
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            {/*            <Link
+            <Link
               to={`/users/update/${params.id}`}
               state={{ data: params.row }}
               style={{ textDecoration: "none" }}>
               <div className="viewButton">Update</div>
-        </Link> */}
+            </Link>
             <div
               className="deleteButton"
               onClick={() => handleDelete(params.row._id)}>

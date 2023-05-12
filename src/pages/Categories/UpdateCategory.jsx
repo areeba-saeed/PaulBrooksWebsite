@@ -7,23 +7,39 @@ import { useParams } from "react-router-dom";
 import PopupAlert from "../../components/popupalert/popupAlert";
 
 const UpdateCategory = ({ title }) => {
-  const [file, setFile] = useState("");
+  const [file, setFile] = useState(null);
   const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [popUpShow, setPopupshow] = useState(false);
   const [popUpText, setPopupText] = useState("");
   const [errorMessage, setErrorMessage] = useState(false);
+  const [initialFile, setInitialFile] = useState(null);
 
   const { id } = useParams();
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/categories")
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/categories")
       .then((response) => {
         if (response.data.length > 0) {
           const user = response.data.find((user) => user._id === id);
           if (user) {
             setName(user.name);
-            setFile(user.image);
+            setDescription(user.description);
+            if (user.image) {
+              fetch(
+                `https://paulbrooksapi.doctorsforhealth.co.uk/images/${user.image}`
+              )
+                .then((response) => response.blob())
+                .then((blob) => {
+                  const file = new File([blob], user.image, {
+                    type: blob.type,
+                  });
+                  setFile(file);
+                  setInitialFile(file);
+                })
+                .catch((error) => console.log(error));
+            }
           }
         }
       })
@@ -37,11 +53,14 @@ const UpdateCategory = ({ title }) => {
 
     const formData = new FormData();
     formData.append("name", name);
-
+    formData.append("description", description);
     formData.append("image", file);
 
     axios
-      .post(`http://localhost:5000/categories/update/${id}`, formData)
+      .post(
+        `https://paulbrooksapi.doctorsforhealth.co.uk/categories/update/${id}`,
+        formData
+      )
       .then((res) => {
         setPopupshow(true);
         setPopupText("Category Update");
@@ -56,7 +75,11 @@ const UpdateCategory = ({ title }) => {
   };
 
   const handleImageUpload = (event) => {
-    setFile(event.target.files[0]);
+    const selectedFile = event.target.files[0];
+    setFile(selectedFile);
+    if (selectedFile) {
+      setInitialFile(selectedFile);
+    }
   };
   return (
     <div className="new">
@@ -97,6 +120,14 @@ const UpdateCategory = ({ title }) => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
+                <label className="label-form">Category Description</label>
+                <textarea
+                  className="input-form"
+                  value={description}
+                  onChange={(e) => {
+                    setDescription(e.target.value);
+                  }}
+                />
                 <label className="label-form">
                   Category Image (PNG/JPEG/JPG)
                 </label>
@@ -106,6 +137,7 @@ const UpdateCategory = ({ title }) => {
                     id="myFile"
                     accept=".png, .jpg, .jpeg"
                     name="myFile"
+                    defaultValue={initialFile}
                     onChange={handleImageUpload}
                   />
                 </div>

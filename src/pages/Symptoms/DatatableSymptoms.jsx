@@ -16,7 +16,7 @@ const DatatableSymptom = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/symptoms")
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/symptoms")
       .then((response) => {
         if (response.data.length > 0) {
           setsymptoms(response.data);
@@ -36,7 +36,7 @@ const DatatableSymptom = () => {
     };
 
     axios
-      .post("http://localhost:5000/symptoms", Symptom)
+      .post("https://paulbrooksapi.doctorsforhealth.co.uk/symptoms", Symptom)
       .then((res) => {
         console.log(res.data);
         setsymptoms(res.data);
@@ -56,7 +56,7 @@ const DatatableSymptom = () => {
   };
 
   const handleDelete = (id) => {
-    axios.delete("http://localhost:5000/symptoms/" + id).then((response) => {
+    axios.delete("https://paulbrooksapi.doctorsforhealth.co.uk/symptoms/" + id).then((response) => {
       console.log(response.data);
     });
     setsymptoms(symptoms.filter((el) => el._id !== id));
@@ -69,7 +69,7 @@ const DatatableSymptom = () => {
 
   const handleDeleteSelectedRows = () => {
     selectedRows.forEach((row) => {
-      axios.delete("http://localhost:5000/symptoms/" + row).then((response) => {
+      axios.delete("https://paulbrooksapi.doctorsforhealth.co.uk/symptoms/" + row).then((response) => {
         setsymptoms(response.data);
         setPopupshow(true);
         setPopupText(`${selectedRows.length} Symptom Deleted`);

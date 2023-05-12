@@ -10,6 +10,7 @@ import PopupAlert from "../../components/popupalert/popupAlert";
 const NewCategory = ({ title }) => {
   const [name, setName] = useState("");
   const [file, setFile] = useState(null);
+  const [description, setDescription] = useState("");
   const [popUpShow, setPopupshow] = useState(false);
   const [popUpText, setPopupText] = useState("");
   const [errorMessage, setErrorMessage] = useState(false);
@@ -19,11 +20,12 @@ const NewCategory = ({ title }) => {
 
     const formData = new FormData();
     formData.append("name", name);
+    formData.append("description", description);
 
     formData.append("image", file);
 
     axios
-      .post("http://localhost:5000/categories/new", formData)
+      .post("https://paulbrooksapi.doctorsforhealth.co.uk/categories/new", formData)
       .then((response) => {
         console.log(response.data);
         if (response.data.error === "Category already exists") {
@@ -78,7 +80,7 @@ const NewCategory = ({ title }) => {
           <div className="right">
             {errorMessage ? (
               <div style={{ color: "red", fontSize: 10 }}>
-                category already exists
+                Category already exists
               </div>
             ) : null}
             <form
@@ -98,6 +100,15 @@ const NewCategory = ({ title }) => {
                     setName(e.target.value);
                   }}
                 />
+                <label className="label-form">Category Description</label>
+                <textarea
+                  className="input-form"
+                  value={description}
+                  onChange={(e) => {
+                    setDescription(e.target.value);
+                  }}
+                />
+
                 <label className="label-form">
                   Category Image (PNG/JPEG/JPG)
                 </label>

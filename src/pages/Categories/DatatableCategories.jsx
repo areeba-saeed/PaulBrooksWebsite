@@ -15,7 +15,7 @@ const DatatableCategories = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/categories")
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/categories")
       .then((response) => {
         if (response.data.length > 0) {
           setcategories(response.data);
@@ -27,7 +27,7 @@ const DatatableCategories = () => {
   }, []);
 
   const handleDelete = (id) => {
-    axios.delete("http://localhost:5000/categories/" + id).then((response) => {
+    axios.delete("https://paulbrooksapi.doctorsforhealth.co.uk/categories/" + id).then((response) => {
       console.log(response.data);
     });
 
@@ -42,7 +42,7 @@ const DatatableCategories = () => {
   const handleDeleteSelectedRows = () => {
     selectedRows.forEach((row) => {
       axios
-        .delete("http://localhost:5000/categories/" + row)
+        .delete("https://paulbrooksapi.doctorsforhealth.co.uk/categories/" + row)
         .then((response) => {
           setcategories(response.data);
           setPopupshow(true);
@@ -57,6 +57,7 @@ const DatatableCategories = () => {
 
   const actionColumn = [
     { field: "name", headerName: "Category Name", width: 200 },
+    { field: "description", headerName: "Description", width: 200 },
     {
       field: "image",
       headerName: "Image",
@@ -70,7 +71,7 @@ const DatatableCategories = () => {
               setOpenModal(true);
             }}>
             <img
-              src={require(`../../assets/category/${params.row.image}`)}
+              src={`https://paulbrooksapi.doctorsforhealth.co.uk/categories/${params.row.image}`}
               width={"40"}
               height={"40"}
               className="imageInCategory"
@@ -104,7 +105,7 @@ const DatatableCategories = () => {
   return (
     <div className="datatable">
       <div className="datatableTitle">
-          Categories
+        Categories
         <Link to="/categories/new" className="link-new">
           Add Category
         </Link>
@@ -125,7 +126,7 @@ const DatatableCategories = () => {
             </p>
             <div style={{ margin: 40 }}>
               <img
-                src={`http://localhost:5000/categories/${selectedRow.image}`}
+                src={`https://paulbrooksapi.doctorsforhealth.co.uk/categories/${selectedRow.image}`}
                 width={"400"}
                 height={"400"}
               />

@@ -11,10 +11,11 @@ const DatatableDoctors = () => {
   const [popUpShow, setPopupshow] = useState(false);
   const [popUpText, setPopupText] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
+  
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/users")
+      .get("https://paulbrooksapi.doctorsforhealth.co.uk/users")
       .then((response) => {
         const doctors = response.data.filter((user) => user.doctor === true);
 
@@ -27,7 +28,7 @@ const DatatableDoctors = () => {
   }, []);
 
   const handleDelete = (id) => {
-    axios.delete("http://localhost:5000/users/" + id).then((response) => {
+    axios.delete("https://paulbrooksapi.doctorsforhealth.co.uk/users/" + id).then((response) => {
       console.log(response.data);
     });
     setDoctors(doctors.filter((el) => el._id !== id));
@@ -40,7 +41,7 @@ const DatatableDoctors = () => {
 
   const handleDeleteSelectedRows = () => {
     selectedRows.forEach((row) => {
-      axios.delete("http://localhost:5000/users/" + row).then((response) => {
+      axios.delete("https://paulbrooksapi.doctorsforhealth.co.uk/users/" + row).then((response) => {
         setDoctors(response.data);
         setPopupshow(true);
         setPopupText(`${selectedRows.length} Doctors Deleted`);
@@ -56,16 +57,16 @@ const DatatableDoctors = () => {
     {
       field: "action",
       headerName: "Action",
-      width: 100,
+      width: 180,
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            {/*            <Link
-              to={`/users/update/${params.id}`}
+            <Link
+              to={`/doctors/update/${params.id}`}
               state={{ data: params.row }}
               style={{ textDecoration: "none" }}>
               <div className="viewButton">Update</div>
-        </Link> */}
+            </Link>
             <div
               className="deleteButton"
               onClick={() => handleDelete(params.row._id)}>

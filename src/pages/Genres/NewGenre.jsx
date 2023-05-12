@@ -21,7 +21,7 @@ const NewGenre = ({ title }) => {
     formData.append("image", file);
 
     axios
-      .post("http://localhost:5000/genres/new", formData)
+      .post("https://paulbrooksapi.doctorsforhealth.co.uk/genres/new", formData)
       .then((response) => {
         console.log(response.data);
         if (response.data.error === "Genre already exists") {
@@ -76,7 +76,7 @@ const NewGenre = ({ title }) => {
           <div className="right">
             {errorMessage ? (
               <div style={{ color: "red", fontSize: 10 }}>
-                category already exists
+                Genre already exists
               </div>
             ) : null}
             <form

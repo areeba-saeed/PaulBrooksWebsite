@@ -20,7 +20,7 @@ const Notification = () => {
       description: description,
     };
 
-    axios.post("http://localhost:5000/medicines/notification", notification);
+    axios.post("https://paulbrooksapi.doctorsforhealth.co.uk/medicines/notification", notification);
     try {
       console.log("Success");
       setPopupshow(true);
