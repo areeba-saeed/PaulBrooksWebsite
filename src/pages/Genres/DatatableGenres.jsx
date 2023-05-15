@@ -27,13 +27,15 @@ const DatatableGenres = () => {
   }, []);
 
   const handleDelete = (id) => {
-    axios.delete("https://paulbrooksapi.doctorsforhealth.co.uk/genres/" + id).then((response) => {
-      console.log(response.data);
-    });
+    axios
+      .delete("https://paulbrooksapi.doctorsforhealth.co.uk/genres/" + id)
+      .then((response) => {
+        console.log(response.data);
+      });
 
     setgenres(genres.filter((el) => el._id !== id));
     setPopupshow(true);
-    setPopupText("Category Deleted");
+    setPopupText("Genre Deleted");
     setTimeout(() => {
       setPopupshow(false);
     }, 2000);
@@ -41,11 +43,13 @@ const DatatableGenres = () => {
 
   const handleDeleteSelectedRows = () => {
     selectedRows.forEach((row) => {
-      axios.delete("https://paulbrooksapi.doctorsforhealth.co.uk/genres/" + row).then((response) => {
-        setgenres(response.data);
-        setPopupshow(true);
-        setPopupText(`${selectedRows.length} genres Deleted`);
-      });
+      axios
+        .delete("https://paulbrooksapi.doctorsforhealth.co.uk/genres/" + row)
+        .then((response) => {
+          setgenres(response.data);
+          setPopupshow(true);
+          setPopupText(`${selectedRows.length} genres Deleted`);
+        });
     });
     setTimeout(() => {
       setPopupshow(false);
@@ -64,11 +68,12 @@ const DatatableGenres = () => {
           <div
             onClick={() => {
               setSelectedRow(params.row);
-              console.log(params.row);
+              console.log(params.row.image);
               setOpenModal(true);
             }}>
             <img
-              src={require(`../../assets/genre/${params.row.image}`)}
+              src={`https://paulbrooksapi.doctorsforhealth.co.uk/genres/${params.row.image}`}
+              alt={params.row.image}
               width={"40"}
               height={"40"}
               className="imageInCategory"
@@ -104,7 +109,7 @@ const DatatableGenres = () => {
       <div className="datatableTitle">
         Genres
         <Link to="/genres/new" className="link-new">
-          Add Category
+          Add Genre
         </Link>
       </div>
       {selectedRows.length > 0 ? (
@@ -124,6 +129,7 @@ const DatatableGenres = () => {
             <div style={{ margin: 40 }}>
               <img
                 src={`https://paulbrooksapi.doctorsforhealth.co.uk/genres/${selectedRow.image}`}
+                alt={selectedRow.image}
                 width={"400"}
                 height={"400"}
               />

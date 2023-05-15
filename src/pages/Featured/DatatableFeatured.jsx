@@ -2,7 +2,6 @@ import "../../style/datatable.css";
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import PopupAlert from "../../components/popupalert/popupAlert";
 import AddFeatured from "./AddFeatured";
 
 const DatatableFeatured = () => {
@@ -10,9 +9,6 @@ const DatatableFeatured = () => {
   const [openModal, setOpenModal] = useState(false);
   const [openAddModal, setOpenAddModal] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-  const [popUpShow, setPopupshow] = useState(false);
-  const [popUpText, setPopupText] = useState("");
-  const [selectedRows, setSelectedRows] = useState([]);
 
   useEffect(() => {
     axios
@@ -63,7 +59,6 @@ const DatatableFeatured = () => {
               onClick={() => {
                 setSelectedRow(params.row);
                 setOpenModal(true);
-                console.log(params.row.bannerImage);
               }}>
               View
             </div>
@@ -161,7 +156,8 @@ const DatatableFeatured = () => {
                   return (
                     <div key={index}>
                       <img
-                        src={require(`../../assets/medicine/${row}`)}
+                        src={`https://paulbrooksapi.doctorsforhealth.co.uk/images//${row}`}
+                        alt={row}
                         width={"100"}
                         height={"100"}
                       />
@@ -174,7 +170,8 @@ const DatatableFeatured = () => {
               </h5>
               <div className="bannerImage">
                 <img
-                  src={require(`../../assets/medicine/${selectedRow.bannerImage}`)}
+                  src={`https://paulbrooksapi.doctorsforhealth.co.uk/images/${selectedRow.bannerImage}`}
+                  alt={selectedRow.bannerImage}
                   width={"300"}
                 />
               </div>
@@ -204,21 +201,7 @@ const DatatableFeatured = () => {
         ""
       )}
 
-      {popUpShow ? (
-        <div className="Popupmodal">
-          <div
-            className="popupInner"
-            style={{
-              backgroundColor: "red",
-              borderWidth: 1,
-              borderColor: "red",
-            }}>
-            <PopupAlert popUpText={popUpText} />
-          </div>
-        </div>
-      ) : (
-        ""
-      )}
+    
       <DataGrid
         className="datagrid"
         rows={medicines}

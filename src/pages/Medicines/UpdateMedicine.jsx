@@ -8,7 +8,7 @@ import PopupAlert from "../../components/popupalert/popupAlert";
 import Select from "react-select";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { json, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 const { uid } = require("uid");
 
 const RandomDigit = uid();
@@ -25,7 +25,7 @@ const UpdateMedicine = ({ title }) => {
   const [benefits, setBenefits] = useState();
   const [sideeffects, setSideEffects] = useState();
   const [directions, setDirections] = useState();
-  const [images, setImages] = useState(medicineData.images);
+  // const [images, setImages] = useState(medicineData.images);
   const [instructions, setInstructions] = useState();
   const [ingredients, setingredients] = useState([]);
   const [category, setcategory] = useState(medicineData.category);
@@ -143,10 +143,10 @@ const UpdateMedicine = ({ title }) => {
     formData.append("bannerImage", bannerImage);
     formData.append("price", price);
 
-    images.forEach((image) => {
-      formData.append("images", image);
-    });
-    if (images.length > 0 && category !== "" && genre !== "") {
+    // images.forEach((image) => {
+    //   formData.append("images", image);
+    // });
+    if (category !== "" && genre !== "") {
       axios
         .post(
           `https://paulbrooksapi.doctorsforhealth.co.uk/medicines/update/${medicineData._id}`,
@@ -184,11 +184,11 @@ const UpdateMedicine = ({ title }) => {
   const handleBannerImageUpload = (event) => {
     setFile(event.target.files[0]);
   };
-  const handleImageUpload = (event) => {
-    const selectedImages = Array.from(event.target.files);
+  // const handleImageUpload = (event) => {
+  //   const selectedImages = Array.from(event.target.files);
 
-    setImages([...images, ...selectedImages]);
-  };
+  //   setImages([...images, ...selectedImages]);
+  // };
 
   const addIngredients = () => {
     if (!ingredientName || !measurement || !weightage) {
@@ -237,9 +237,6 @@ const UpdateMedicine = ({ title }) => {
         </div>
         <div className="bottom">
           <div className="right">
-            <h5 style={{ color: "green" }}>
-              Important: Make sure to upload files again
-            </h5>
             <form
               className="form-new"
               onSubmit={handleSubmit}
@@ -307,7 +304,7 @@ const UpdateMedicine = ({ title }) => {
                 />
                 {/* Description */}
                 <label htmlFor="description" className="label-form">
-                  Medicine Description: (Max 10 points)
+                  Medicine Description:
                 </label>
                 <ReactQuill
                   value={description}
@@ -404,8 +401,8 @@ const UpdateMedicine = ({ title }) => {
                   value={directions}
                   onChange={(value) => setDirections(value)}
                 />
-
                 {/*  Images */}
+                {/*
                 <label className="label-form">
                   Medicine Image (PNG/JPEG/JPG) (Max 5)
                 </label>
@@ -415,6 +412,19 @@ const UpdateMedicine = ({ title }) => {
                   onChange={handleImageUpload}
                   multiple
                 />
+                {images.map((row, index) => {
+                  console.log(row);
+                  return (
+                    <div key={index}>
+                      <img
+                        src={`https://paulbrooksapi.doctorsforhealth.co.uk/images/${row}`}
+                        width={"100"}
+                        height={"100"}
+                      />
+                    </div>
+                  );
+                })}
+              */}
                 {/* Banner Image */}
                 <label className="label-form">
                   Medicine Banner Image (PNG/JPEG/JPG)

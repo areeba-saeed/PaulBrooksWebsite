@@ -1,6 +1,6 @@
 import "../../style/datatable.css";
 import { DataGrid } from "@mui/x-data-grid";
-import { doctorColumns, userColumns } from "../../datatablesource";
+import { doctorColumns } from "../../datatablesource";
 import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -11,7 +11,6 @@ const DatatableDoctors = () => {
   const [popUpShow, setPopupshow] = useState(false);
   const [popUpText, setPopupText] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
-  
 
   useEffect(() => {
     axios
@@ -28,9 +27,11 @@ const DatatableDoctors = () => {
   }, []);
 
   const handleDelete = (id) => {
-    axios.delete("https://paulbrooksapi.doctorsforhealth.co.uk/users/" + id).then((response) => {
-      console.log(response.data);
-    });
+    axios
+      .delete("https://paulbrooksapi.doctorsforhealth.co.uk/users/" + id)
+      .then((response) => {
+        console.log(response.data);
+      });
     setDoctors(doctors.filter((el) => el._id !== id));
     setPopupshow(true);
     setPopupText("Doctor Deleted");
@@ -41,11 +42,13 @@ const DatatableDoctors = () => {
 
   const handleDeleteSelectedRows = () => {
     selectedRows.forEach((row) => {
-      axios.delete("https://paulbrooksapi.doctorsforhealth.co.uk/users/" + row).then((response) => {
-        setDoctors(response.data);
-        setPopupshow(true);
-        setPopupText(`${selectedRows.length} Doctors Deleted`);
-      });
+      axios
+        .delete("https://paulbrooksapi.doctorsforhealth.co.uk/users/" + row)
+        .then((response) => {
+          setDoctors(response.data);
+          setPopupshow(true);
+          setPopupText(`${selectedRows.length} Doctors Deleted`);
+        });
     });
     setTimeout(() => {
       setPopupshow(false);

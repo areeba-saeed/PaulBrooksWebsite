@@ -14,8 +14,6 @@ export const userColumns = [
   { field: "userId", headerName: "ID", width: 100 },
   { field: "name", headerName: "User Name", width: 150 },
   { field: "phoneNo", headerName: "Phone No.", width: 150 },
-  { field: "country", headerName: "Country", width: 150 },
-  { field: "city", headerName: "City", width: 150 },
 ];
 export const doctorColumns = [
   { field: "userId", headerName: "UserId", width: 100 },

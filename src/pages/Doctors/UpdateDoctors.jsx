@@ -1,7 +1,7 @@
 import "../../style/new.scss";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import PopupAlert from "../../components/popupalert/popupAlert";
 import axios from "axios";
@@ -9,40 +9,15 @@ import axios from "axios";
 const UpdateDoctors = ({ title }) => {
   const location = useLocation();
   const userData = location.state.data;
-  const [name, setName] = useState(userData.name);
   const [password, setPassword] = useState("");
   const [popUpShow, setPopupshow] = useState(false);
   const [popUpText, setPopupText] = useState("");
-  const [country, setCountry] = useState(userData.country);
-  const [city, setCity] = useState(userData.city);
-  const [allCountries, setAllContries] = useState([]);
-  const [allCities, setAllCities] = useState([]);
-  const [address, setAddress] = useState(userData.address);
-  const [workPlaceName, setWordPlaceName] = useState(userData.workPlaceName);
-
-  useEffect(() => {
-    axios
-      .get(`http://192.168.100.22:5000/countries`)
-      .then((response) => {
-        setAllContries(response.data);
-        const selectedCountry = response.data.find((c) => c.name === country);
-        setAllCities(selectedCountry.cities);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
 
   const handleUpdate = (e) => {
     e.preventDefault();
 
     const dataUsers = {
-      // name: name,
       password: password,
-      // country: country,
-      // city: city,
-      // address: address,
-      // workPlaceName: workPlaceName,
     };
     axios
       .put(

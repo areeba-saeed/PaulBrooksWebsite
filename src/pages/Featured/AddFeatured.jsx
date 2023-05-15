@@ -4,6 +4,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { AiOutlineCheck } from "react-icons/ai";
 import { RxCross1 } from "react-icons/rx";
+import PopupAlert from "../../components/popupalert/popupAlert";
 
 const ActionColumn = (props) => {
   const { row, selectedRows, setSelectedRows } = props;
@@ -29,7 +30,6 @@ const AddFeatured = () => {
   const [popUpShow, setPopupshow] = useState(false);
   const [popUpText, setPopupText] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
-  const [error, setError] = useState(false);
 
   useEffect(() => {
     axios
@@ -58,8 +58,8 @@ const AddFeatured = () => {
           console.log(response.data);
           setPopupshow(true);
           setPopupText(`${selectedRows.length} Medicines Added`);
-          window.location.reload();
           setTimeout(() => {
+            window.location.reload();
             setPopupshow(false);
           }, 2000);
           setSelectedRows([]);
@@ -68,7 +68,7 @@ const AddFeatured = () => {
           console.log(error);
         });
     } else {
-      setError(true);
+      window.alert("No more than 10 featured medicines can be added");
     }
   };
 
@@ -117,6 +117,7 @@ const AddFeatured = () => {
           <div>
             <img
               src={`https://paulbrooksapi.doctorsforhealth.co.uk/images/${params.row.bannerImage}`}
+              alt={params.row.bannerImage}
               width={"150"}
               height={"40"}
             />
@@ -134,6 +135,21 @@ const AddFeatured = () => {
         onClick={handleAddSelectedRows}>
         Add
       </div>
+      {popUpShow ? (
+        <div className="Popupmodal">
+          <div
+            className="popupInner"
+            style={{
+              backgroundColor: "#8AFF8A",
+              borderWidth: 1,
+              borderColor: "#007500",
+            }}>
+            <PopupAlert popUpText={popUpText} />
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
       <DataGrid
         className="datagrid"
         rows={medicines}

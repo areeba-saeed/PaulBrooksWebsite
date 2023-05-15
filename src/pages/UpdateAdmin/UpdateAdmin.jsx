@@ -29,6 +29,7 @@ const UpdateAdmin = () => {
   }, []);
 
   const handleUpdate = (e) => {
+    e.preventDefault();
     axios
       .post(`https://paulbrooksapi.doctorsforhealth.co.uk/admin/${id}`, {
         username: username,
@@ -36,6 +37,12 @@ const UpdateAdmin = () => {
       })
       .then((response) => {
         console.log(response);
+        setPopupText("Admin updated");
+        setPopupshow(true);
+        setTimeout(() => {
+          window.location.reload();
+          setPopupshow(false);
+        }, 1500);
       })
       .catch((error) => {
         console.log(error);

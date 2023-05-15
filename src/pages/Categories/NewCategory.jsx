@@ -2,9 +2,7 @@ import "../../style/new.scss";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import { useState } from "react";
-import { useEffect } from "react";
 import axios from "axios";
-import { uid } from "uid";
 import PopupAlert from "../../components/popupalert/popupAlert";
 
 const NewCategory = ({ title }) => {

@@ -10,27 +10,9 @@ const UpdateUsers = ({ title }) => {
   const location = useLocation();
   const userData = location.state.data;
   const { id } = useParams();
-  const [name, setName] = useState(userData.name);
   const [password, setPassword] = useState(userData.password);
   const [popUpShow, setPopupshow] = useState(false);
   const [popUpText, setPopupText] = useState("");
-  const [country, setCountry] = useState(userData.country);
-  const [city, setCity] = useState(userData.city);
-  const [allCountries, setAllContries] = useState([]);
-  const [allCities, setAllCities] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get(`http://192.168.100.22:5000/countries`)
-      .then((response) => {
-        setAllContries(response.data);
-        const selectedCountry = response.data.find((c) => c.name === country);
-        setAllCities(selectedCountry.cities);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
 
   const handleUpdate = (e) => {
     e.preventDefault();
@@ -85,7 +67,6 @@ const UpdateUsers = ({ title }) => {
           <div className="right">
             <form className="form-new" onSubmit={handleUpdate}>
               <div className="formInput">
-              
                 <label className="label-form">Password</label>
                 <input
                   type="text"
@@ -94,7 +75,6 @@ const UpdateUsers = ({ title }) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-               
 
                 <button className="createButton">Update</button>
               </div>

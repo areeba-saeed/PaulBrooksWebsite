@@ -27,9 +27,11 @@ const DatatableCategories = () => {
   }, []);
 
   const handleDelete = (id) => {
-    axios.delete("https://paulbrooksapi.doctorsforhealth.co.uk/categories/" + id).then((response) => {
-      console.log(response.data);
-    });
+    axios
+      .delete("https://paulbrooksapi.doctorsforhealth.co.uk/categories/" + id)
+      .then((response) => {
+        console.log(response.data);
+      });
 
     setcategories(categories.filter((el) => el._id !== id));
     setPopupshow(true);
@@ -42,7 +44,9 @@ const DatatableCategories = () => {
   const handleDeleteSelectedRows = () => {
     selectedRows.forEach((row) => {
       axios
-        .delete("https://paulbrooksapi.doctorsforhealth.co.uk/categories/" + row)
+        .delete(
+          "https://paulbrooksapi.doctorsforhealth.co.uk/categories/" + row
+        )
         .then((response) => {
           setcategories(response.data);
           setPopupshow(true);
@@ -72,6 +76,7 @@ const DatatableCategories = () => {
             }}>
             <img
               src={`https://paulbrooksapi.doctorsforhealth.co.uk/categories/${params.row.image}`}
+              alt={params.row.image}
               width={"40"}
               height={"40"}
               className="imageInCategory"
@@ -127,6 +132,7 @@ const DatatableCategories = () => {
             <div style={{ margin: 40 }}>
               <img
                 src={`https://paulbrooksapi.doctorsforhealth.co.uk/categories/${selectedRow.image}`}
+                alt={selectedRow.image}
                 width={"400"}
                 height={"400"}
               />

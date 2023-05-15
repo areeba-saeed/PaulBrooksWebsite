@@ -3,9 +3,7 @@ import Login from "./pages/Login/Login";
 import Adminroutes from "./routes/adminroutes";
 function App() {
   const user = localStorage.getItem("loggedIn");
-  return (
-    <div className="app">{user !== null ? <Adminroutes /> : <Login />}</div>
-  );
+  return <div className="app">{user ? <Adminroutes /> : <Login />}</div>;
 }
 
 export default App;

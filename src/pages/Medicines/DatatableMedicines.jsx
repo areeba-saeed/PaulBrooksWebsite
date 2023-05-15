@@ -12,7 +12,9 @@ const DatatableMedicines = () => {
   const [popUpShow, setPopupshow] = useState(false);
   const [popUpText, setPopupText] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
-
+  const [images, setImage] = useState([]);
+  const [openImageModal, setImageModal] = useState(false);
+  const [updatedImages, setUpdatedImage] = useState([]);
   useEffect(() => {
     axios
       .get("https://paulbrooksapi.doctorsforhealth.co.uk/medicines")
@@ -33,9 +35,9 @@ const DatatableMedicines = () => {
       )
       .then((response) => {
         console.log(response.data);
+        setmedicines(medicines.filter((el) => el._id !== id));
       });
 
-    setmedicines(medicines.filter((el) => el._id !== id));
     setPopupshow(true);
     setPopupText("Category Deleted");
     setTimeout(() => {
@@ -61,6 +63,71 @@ const DatatableMedicines = () => {
     setSelectedRows([]);
   };
 
+  const handleAdd = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+
+    images.forEach((image) => {
+      formData.append("images", image);
+    });
+    if (images.length + updatedImages.length < 6) {
+      axios
+        .patch(
+          `https://paulbrooksapi.doctorsforhealth.co.uk/medicines/addImage/${selectedRow._id}`,
+          formData
+        )
+        .then((response) => {
+          setUpdatedImage(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      setTimeout(() => {
+        setPopupshow(false);
+      }, 2000);
+    } else {
+      window.alert("No maximum 5 imaegs allowed");
+    }
+  };
+
+  const handleDeleteImage = (index) => {
+    axios
+      .delete(
+        `https://paulbrooksapi.doctorsforhealth.co.uk/medicines/deleteImage/${selectedRow._id}/${index}`
+      )
+      .then((response) => {
+        setUpdatedImage(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    setTimeout(() => {
+      setPopupshow(false);
+    }, 2000);
+  };
+
+  const handleImageUpload = (event) => {
+    const selectedImages = Array.from(event.target.files);
+    const uniqueImages = selectedImages.filter(
+      (image, index, self) =>
+        index ===
+        self.findIndex((t) => t.name === image.name && t.size === image.size)
+    );
+
+    const totalImages = [...updatedImages, ...uniqueImages];
+    if (totalImages.length > 5) {
+      window.alert("Maximum of 5 images allowed");
+    } else {
+      const newImages = [...images, ...uniqueImages];
+      if (newImages.length > 5) {
+        setImage(newImages.slice(0, 5));
+      } else {
+        setImage(newImages);
+      }
+    }
+  };
+
   const actionColumn = [
     { field: "medicineId", headerName: "Medicine Id", width: 150 },
     { field: "name", headerName: "Medicine Name", width: 150 },
@@ -70,7 +137,7 @@ const DatatableMedicines = () => {
     {
       field: "action",
       headerName: "Action",
-      width: 300,
+      width: 400,
       renderCell: (params) => {
         return (
           <div className="cellAction">
@@ -79,7 +146,6 @@ const DatatableMedicines = () => {
               onClick={() => {
                 setSelectedRow(params.row);
                 setOpenModal(true);
-                console.log(params.row.bannerImage);
               }}>
               View
             </div>
@@ -89,6 +155,15 @@ const DatatableMedicines = () => {
               style={{ textDecoration: "none" }}>
               <div className="viewButton">Update</div>
             </Link>
+            <div
+              className="deleteButton"
+              onClick={() => {
+                setSelectedRow(params.row);
+                setImageModal(true);
+                setUpdatedImage(params.row.images);
+              }}>
+              Update Images
+            </div>
             <div
               className="deleteButton"
               onClick={() => handleDelete(params.row._id)}>
@@ -239,11 +314,11 @@ const DatatableMedicines = () => {
               </h5>
               <div className="bannerImage">
                 {selectedRow.images.map((row, index) => {
-                  console.log(row);
                   return (
                     <div key={index}>
                       <img
                         src={`https://paulbrooksapi.doctorsforhealth.co.uk/images/${row}`}
+                        alt={row}
                         width={"100"}
                         height={"100"}
                       />
@@ -259,6 +334,7 @@ const DatatableMedicines = () => {
                   <div className="bannerImage">
                     <img
                       src={`https://paulbrooksapi.doctorsforhealth.co.uk/images/${selectedRow.bannerImage}`}
+                      alt={selectedRow.bannerImage}
                       width={"300"}
                     />
                   </div>
@@ -266,6 +342,57 @@ const DatatableMedicines = () => {
               ) : (
                 ""
               )}
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+      {openImageModal ? (
+        <div className="modal">
+          <div className="modalInner">
+            <p className="closeModal" onClick={() => setImageModal(false)}>
+              &times;
+            </p>
+            <div style={{ margin: 40 }}>
+              <h4>Update images</h4>
+
+              <input
+                type="file"
+                accept=".png, .jpg, .jpeg"
+                onChange={handleImageUpload}
+                multiple
+              />
+              <button onClick={handleAdd}>Add</button>
+              <div>
+                {updatedImages.map((row, index) => {
+                  console.log(row);
+                  return (
+                    <div
+                      key={index}
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        margin: 20,
+
+                        alignItems: "center",
+                      }}>
+                      <img
+                        src={`https://paulbrooksapi.doctorsforhealth.co.uk/images/${row}`}
+                        alt={row}
+                        width={"50"}
+                        height={"50"}
+                      />
+                      <p
+                        className="deleteMedImages"
+                        onClick={() => handleDeleteImage(index)}>
+                        &times;
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>

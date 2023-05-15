@@ -269,3 +269,8 @@
 .dosageInput {
   width: 30%;
 }
+.deleteMedImages {
+  font-size: 25px;
+  color: black;
+  cursor: pointer;
+}
